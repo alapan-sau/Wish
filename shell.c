@@ -131,11 +131,22 @@ void backProcess(ll n, char *commarg[]){
     if(forkReturn==0){                                                // background/child process
         commarg[n-1]=NULL;
         execvp(commarg[0],commarg);
-        //printf("%lld child executed\n",getpid());
         exit(0);
     }
     else{
-        // printf("%lld parent executed\n",getpid());
+        return;
+    }
+}
+
+void foreProcess(ll n,char *commarg[]){
+    ll forkReturn = fork();
+    if(forkReturn==0){                                                // foreground/child process
+        commarg[n]=NULL;
+        execvp(commarg[0],commarg);
+        exit(0);
+    }
+    else{
+        wait(NULL);
         return;
     }
 }
@@ -186,6 +197,10 @@ void execute_command(){
         }
         else if(strcmp(commarg[0],"q")==0){
             exit(0);
+        }
+        else{
+            foreProcess(totalcommarg,commarg);
+            continue;
         }
     }
 }
