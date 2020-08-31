@@ -151,6 +151,42 @@ void foreProcess(ll n,char *commarg[]){
     }
 }
 
+void pinfo(ll n, char *commarg[]){
+    pid_t pid;
+    if(n==1) pid = getpid();
+    else pid = atoi(commarg[1]);
+    char procfile[1000];
+    char execfile[1000];
+    sprintf(procfile, "/proc/%d/stat", pid);
+    sprintf(execfile, "/proc/%d/exe", pid);
+
+    char status;
+    ll memory;
+    FILE  *procfd = fopen(procfile, "r");
+    fscanf(procfd, "%*d %*s %c %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %lld %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d", &status, &memory);
+    fclose(procfd);
+    printf("PID -- %d\n", pid);
+    printf("Process Status -- %c\n", status);
+    printf("Memory -- %lld\n", memory);
+
+    char procadd[10000];
+    int len = readlink(execfile, procadd, sizeof(procadd));
+    procadd[len] = '\0';
+
+    len = strlen(homedir);
+    ll index=0;
+    for(index=0;index<len;index++){
+        if(homedir[index]!=procadd[index]){
+            printf("Executable Path --  %s\n", procadd);
+            return;
+        }
+    }
+    char address[100000];
+    strcpy(address,"~");
+    strcat(address,procadd+strlen(homedir));
+    printf("Executable Path --  %s\n", address);
+}
+
 void execute_command(){
 
     char *allcommands[MA];
@@ -197,6 +233,9 @@ void execute_command(){
         }
         else if(strcmp(commarg[0],"q")==0){
             exit(0);
+        }
+        else if(strcmp(commarg[0],"pinfo")==0){
+            pinfo(totalcommarg,commarg);
         }
         else{
             foreProcess(totalcommarg,commarg);
