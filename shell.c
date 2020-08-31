@@ -126,6 +126,20 @@ void ls(ll n, char *commarg[]){
     }
 }
 
+void backProcess(ll n, char *commarg[]){
+    ll forkReturn = fork();
+    if(forkReturn==0){                                                // background/child process
+        commarg[n-1]=NULL;
+        execvp(commarg[0],commarg);
+        //printf("%lld child executed\n",getpid());
+        exit(0);
+    }
+    else{
+        // printf("%lld parent executed\n",getpid());
+        return;
+    }
+}
+
 void execute_command(){
 
     char *allcommands[MA];
@@ -137,7 +151,7 @@ void execute_command(){
     ll totalcommands = index;
 
     for(ll task=0;task<totalcommands;task++){
-        char *commarg[100];
+        char *commarg[1000];
         commarg[0] = strtok(allcommands[task]," ");
         index = 0;
         while(commarg[index]!=NULL){
@@ -145,6 +159,11 @@ void execute_command(){
         }
         ll totalcommarg = index;
 
+        if(strcmp(commarg[totalcommarg-1],"&")==0){
+            // printf("BACK GROUND PROCESS\n");
+            backProcess(totalcommarg,commarg);
+            continue;
+        }
         if(strcmp(commarg[0],"cd")==0){
             if(totalcommarg==1) cd("~");
             else cd(commarg[1]);
@@ -171,19 +190,19 @@ void execute_command(){
     }
 }
 
-void getcommand(){                                              // fetches command from terminal
+void getcommand(){                                                  // fetches command from terminal
     size_t size_command = 100;
 
     command = (char *)malloc(size_command);
     getline(&command, &size_command, stdin);
 }
 
-void gethomedir(){                                               // stores home dir to homedir
+void gethomedir(){                                                      // stores home dir to homedir
     getcwd(homedir,MA);
     return;
 }
 
-void reference(){                                                                   // prompt fx
+void reference(){                                                                       // prompt fx
     char username[MA];
     char hostname[MA];
     char reference[MA];
