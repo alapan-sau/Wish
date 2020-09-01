@@ -1,0 +1,3 @@
+void history(char *command){
+
+}
