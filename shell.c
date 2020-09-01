@@ -22,8 +22,24 @@ char currdir[MA];
 
 char *command;
 
+void history(char *command){
 
-void getcurdir(){                                               // stores the current dir to currdir
+}
+
+void sigchld_handler(int signum)                                                // signal Handler
+{
+    pid_t pid;
+    int   status;
+    // while ((pid = waitpid(-1, &status, WNOHANG)) != -1)
+    // {
+    //     printf("%d ended\n",pid);   // Or whatever you need to do with the PID
+    // }
+    pid = waitpid(-1, &status, WNOHANG);
+    if(pid!=-1)printf("%d ended\n",pid);
+}
+
+
+void getcurdir(){                                                           // stores the current dir to currdir
     getcwd(currdir,MA);
     if(strcmp(currdir,homedir)==0) strcpy(currdir,"~");
     else{
@@ -42,7 +58,7 @@ void getcurdir(){                                               // stores the cu
     return;
 }
 
-void cd(char *path){
+void cd(char *path){                                                            // cd
     char address[MA];
     if(path[0]=='~'){
     strcpy(address,homedir);
@@ -53,27 +69,51 @@ void cd(char *path){
     getcurdir();
 }
 
-void ls(ll n, char *commarg[]){
+void ls(ll n, char *commarg[]){                                                 // ls -l -la -a ...
 
-    ll flag = 0; // normal ls=0, ls -l=1, ls -la=2, ls -a=4,
-    char *path;
-    ll start=1;
-    if(n==1){
-        n++;
-        commarg[1]=currdir;
-    }
-    else if(n>=2 && commarg[1][0]=='-'){
-        if(strcmp(commarg[1],"-la")==0 || strcmp(commarg[1],"-al")==0)flag = 2;
-        else if(strcmp(commarg[1],"-l")==0) flag = 1;
-        else if(strcmp(commarg[1],"-a")==0) flag = 4;
-        start = 2;
-        if(n==2){
-            commarg[2]=currdir;
-            n++;
+    ll flagArg=0;
+    ll flagA=0;
+    ll flagL=0;
+
+    ll totaldir = 0;
+    for(ll i=1;i<n;i++){
+        if(commarg[i][0]=='-'){
+            if(strcmp(commarg[i],"-l")==0){
+                flagL=1;
+            }
+            if(strcmp(commarg[i],"-a")==0){
+                flagA=1;
+            }
+            if(strcmp(commarg[i],"-la")==0){
+                flagL=1;
+                flagA=1;
+            }
+            if(strcmp(commarg[i],"-al")==0){
+                flagL=1;
+                flagA=1;
+            }
+        }
+        else{
+            flagArg=1;
+            totaldir++;
         }
     }
+    ll flag = 0;                                                        // normal ls=0, ls -l=1, ls -la=2, ls -a=4,
+    if(flagA && flagL) flag = 2;
+    else if(flagA) flag = 4;
+    else if(flagL) flag = 1;
+    else flag = 0;
 
-    for(ll i=start;i<n;i++){
+    if(flagArg==0){
+        commarg[n]=currdir;
+        n++;
+        totaldir++;
+    }
+
+    char * path;
+    for(ll i=1;i<n;i++){
+        if(commarg[i][0]=='-')continue;
+        totaldir--;
         path = commarg[i];
         char address[MA];
         if(path[0]=='~'){
@@ -122,7 +162,7 @@ void ls(ll n, char *commarg[]){
             }
         }
         closedir(mydir);
-        if(i!=n-1) printf("\n");
+        if(totaldir) printf("\n");
     }
 }
 
@@ -134,6 +174,7 @@ void backProcess(ll n, char *commarg[]){
         exit(0);
     }
     else{
+        printf("%d started\n",getpid());
         return;
     }
 }
@@ -151,7 +192,7 @@ void foreProcess(ll n,char *commarg[]){
     }
 }
 
-void pinfo(ll n, char *commarg[]){
+void pinfo(ll n, char *commarg[]){                                      // pinfo
     pid_t pid;
     if(n==1) pid = getpid();
     else pid = atoi(commarg[1]);
@@ -169,7 +210,7 @@ void pinfo(ll n, char *commarg[]){
     printf("Process Status -- %c\n", status);
     printf("Memory -- %lld\n", memory);
 
-    char procadd[10000];
+    char procadd[MA];
     int len = readlink(execfile, procadd, sizeof(procadd));
     procadd[len] = '\0';
 
@@ -181,13 +222,13 @@ void pinfo(ll n, char *commarg[]){
             return;
         }
     }
-    char address[100000];
+    char address[MA];
     strcpy(address,"~");
     strcat(address,procadd+strlen(homedir));
     printf("Executable Path --  %s\n", address);
 }
 
-void execute_command(){
+void execute_command(){                                                 // command handler
 
     char *allcommands[MA];
     allcommands[0] = strtok(command,";\n");
@@ -198,7 +239,7 @@ void execute_command(){
     ll totalcommands = index;
 
     for(ll task=0;task<totalcommands;task++){
-        char *commarg[1000];
+        char *commarg[MA];
         commarg[0] = strtok(allcommands[task]," ");
         index = 0;
         while(commarg[index]!=NULL){
@@ -207,7 +248,6 @@ void execute_command(){
         ll totalcommarg = index;
 
         if(strcmp(commarg[totalcommarg-1],"&")==0){
-            // printf("BACK GROUND PROCESS\n");
             backProcess(totalcommarg,commarg);
             continue;
         }
@@ -251,12 +291,12 @@ void getcommand(){                                                  // fetches c
     getline(&command, &size_command, stdin);
 }
 
-void gethomedir(){                                                      // stores home dir to homedir
+void gethomedir(){                                                  // stores home dir to homedir
     getcwd(homedir,MA);
     return;
 }
 
-void reference(){                                                                       // prompt fx
+void reference(){                                                    // prompt fx
     char username[MA];
     char hostname[MA];
     char reference[MA];
@@ -270,6 +310,7 @@ void reference(){                                                               
 int main(){
     gethomedir();
     while(1){
+        signal(SIGCHLD, sigchld_handler);
         reference();
         getcommand();
         execute_command();
