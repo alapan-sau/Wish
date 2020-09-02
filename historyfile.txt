@@ -1,20 +1,11 @@
 q
-history -5
-jsal
+history 20
+history 9
+history -8
 history
-q
-history -6
-history -3
-history
-ls
-ls
-a
+history 10
+history -10
 q
 history
-history
-historyhistorylslsq
-history
 q
-dncjak
-cnjdsk
-cnjadkc
+history 5

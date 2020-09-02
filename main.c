@@ -23,6 +23,7 @@ void loadhistory(){
 
 void updatehistory(){
     if(strcmp(command,"")==0) return;
+    if(strcmp(command,historyarr[0])==0) return;
     if(hisnum<20) hisnum++;
     for(ll i=18; i>=0; i--){
         strcpy(historyarr[i+1],historyarr[i]);
