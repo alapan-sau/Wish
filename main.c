@@ -113,10 +113,10 @@ void execute_command(){                                                 // comma
         }
         else if(strcmp(commarg[0],"nightswatch")==0){
             if(strcmp(commarg[3],"interrupts")==0){
-                // do something
+                interrupts(commarg);
             }
             if(strcmp(commarg[3],"newborn")==0){
-                // do some thing
+                newborn(commarg);
             }
         }
         else{
