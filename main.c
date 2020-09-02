@@ -6,6 +6,7 @@
 #include "pinfo.h"
 #include "sigchld_handler.h"
 #include "cd.h"
+#include "nightswatch.h"
 
 void loadhistory(){
     FILE * hf =  fopen("historyfile.txt","r");
@@ -109,6 +110,14 @@ void execute_command(){                                                 // comma
         }
         else if(strcmp(commarg[0],"history")==0){
             history(totalcommarg,commarg);
+        }
+        else if(strcmp(commarg[0],"nightswatch")==0){
+            if(strcmp(commarg[3],"interrupts")==0){
+                // do something
+            }
+            if(strcmp(commarg[3],"newborn")==0){
+                // do some thing
+            }
         }
         else{
             foreProcess(totalcommarg,commarg);
