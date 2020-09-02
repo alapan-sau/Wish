@@ -1,1 +1,1 @@
-void history(char *command);
+void history(long long int n, char *commarg[]);

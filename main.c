@@ -7,6 +7,37 @@
 #include "sigchld_handler.h"
 #include "cd.h"
 
+void loadhistory(){
+    FILE * hf =  fopen("historyfile.txt","r");
+    if(hf){
+        int pos;
+        ll i = 0;
+        while ((i<20) && fgets(historyarr[i], 100, hf)!= NULL){
+            i++;
+        }
+        hisnum = i;
+        for(;i<20;i++) strcpy(historyarr[i],"");
+        fclose(hf);
+    }
+}
+
+void updatehistory(){
+    if(strcmp(command,"")==0) return;
+    if(hisnum<20) hisnum++;
+    for(ll i=18; i>=0; i--){
+        strcpy(historyarr[i+1],historyarr[i]);
+    }
+    strcpy(historyarr[0],command);
+    FILE * hf = fopen("historyfile.txt","w");
+    if(hf){
+        for(ll i=0;i<hisnum;i++){
+            fprintf(hf,"%s",historyarr[i]);
+        }
+        fclose(hf);
+    }
+    return;
+}
+
 void getcurdir(){                                                           // stores the current dir to currdir
     getcwd(currdir,MA);
     if(strcmp(currdir,homedir)==0) strcpy(currdir,"~");
@@ -28,7 +59,6 @@ void getcurdir(){                                                           // s
 
 
 void execute_command(){                                                 // command handler
-
     char *allcommands[MA];
     allcommands[0] = strtok(command,";\n");
     ll index = 0;
@@ -76,6 +106,9 @@ void execute_command(){                                                 // comma
         else if(strcmp(commarg[0],"pinfo")==0){
             pinfo(totalcommarg,commarg);
         }
+        else if(strcmp(commarg[0],"history")==0){
+            history(totalcommarg,commarg);
+        }
         else{
             foreProcess(totalcommarg,commarg);
             continue;
@@ -107,11 +140,13 @@ void reference(){                                                    // prompt f
 }
 
 int main(){
+    loadhistory();
     gethomedir();
     while(1){
         signal(SIGCHLD, sigchld_handler);
         reference();
         getcommand();
+        updatehistory();
         execute_command();
     }
 }

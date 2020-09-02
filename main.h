@@ -22,6 +22,9 @@ char currdir[MA];
 
 char *command;
 
+char historyarr[20][100];
+ll hisnum;
+
 void getcurdir();
 void execute_command();
 void getcommand();
