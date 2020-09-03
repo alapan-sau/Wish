@@ -7,6 +7,7 @@
 #include "sigchld_handler.h"
 #include "cd.h"
 #include "nightswatch.h"
+#include "util.h"
 
 void loadhistory(){
     FILE * hf =  fopen("historyfile.txt","r");
@@ -42,20 +43,7 @@ void updatehistory(){
 
 void getcurdir(){                                                           // stores the current dir to currdir
     getcwd(currdir,MA);
-    if(strcmp(currdir,homedir)==0) strcpy(currdir,"~");
-    else{
-        ll len = strlen(homedir);
-        ll index=0;
-        for(index=0;index<len;index++){
-            if(homedir[index]!=currdir[index])
-                return;
-        }
-        ll i=1;
-        len = strlen(currdir);
-        for(;index<=len;index++,i++)
-            currdir[i]=currdir[index];
-        currdir[0]='~';
-    }
+    tilda_adder(currdir);
     return;
 }
 
@@ -128,7 +116,7 @@ void execute_command(){                                                 // comma
 
 void getcommand(){                                                  // fetches command from terminal
     size_t size_command = 100;
-
+    
     command = (char *)malloc(size_command);
     getline(&command, &size_command, stdin);
 }

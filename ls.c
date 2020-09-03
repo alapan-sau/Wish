@@ -1,4 +1,5 @@
 #include "main.h"
+#include "util.h"
 
 
 void ls(ll n, char *commarg[]){                                                 // ls -l -la -a ...
@@ -42,21 +43,18 @@ void ls(ll n, char *commarg[]){                                                 
         totaldir++;
     }
 
-    char * path;
+    char path[MA];
+
     for(ll i=1;i<n;i++){
+
         if(commarg[i][0]=='-')continue;
         totaldir--;
-        path = commarg[i];
-        char address[MA];
-        if(path[0]=='~'){
-            strcpy(address,homedir);
-            strcat(address,path+1);
-        }
-        else strcpy(address,path);
+        strcpy(path,commarg[i]);
 
+        tilda_remover(path);
 
         struct dirent *newfile;
-        DIR *mydir = opendir(address);
+        DIR *mydir = opendir(path);
         struct stat mystat;
         while((newfile = readdir(mydir)) != NULL){
             if(flag==4)printf("%s\n", newfile->d_name);
@@ -65,7 +63,7 @@ void ls(ll n, char *commarg[]){                                                 
             }
             else{
                 char buf[512];
-                sprintf(buf, "%s/%s", address, newfile->d_name);
+                sprintf(buf, "%s/%s", path, newfile->d_name);
                 if(stat(buf, &mystat) < 0)
                     return;
                 char permissions[20];

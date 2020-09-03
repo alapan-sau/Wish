@@ -1,4 +1,5 @@
 #include "main.h"
+#include "util.h"
 
 void pinfo(ll n, char *commarg[]){                                      // pinfo
     pid_t pid;
@@ -22,16 +23,6 @@ void pinfo(ll n, char *commarg[]){                                      // pinfo
     int len = readlink(execfile, procadd, sizeof(procadd));
     procadd[len] = '\0';
 
-    len = strlen(homedir);
-    ll index=0;
-    for(index=0;index<len;index++){
-        if(homedir[index]!=procadd[index]){
-            printf("Executable Path --  %s\n", procadd);
-            return;
-        }
-    }
-    char address[MA];
-    strcpy(address,"~");
-    strcat(address,procadd+strlen(homedir));
-    printf("Executable Path --  %s\n", address);
+    tilda_adder(procadd);
+    printf("Executable Path --  %s\n", procadd);
 }
