@@ -28,7 +28,7 @@ int endWatch(ll n){
 
 void interrupts(char * commarg[]){
     ll n = atoi(commarg[2]);
-    FILE * id = fopen("./interrupts","r");  // change . to /proc
+    FILE * id = fopen("/proc/interrupts","r");  // change . to /proc
     char lineCPU[MA];
     fgets(lineCPU, MA, id);
     printf("%s\n",lineCPU);
@@ -43,7 +43,7 @@ void interrupts(char * commarg[]){
     }
     lenCPU = strlen(lineCPU);
     while(1){
-        id = fopen("./interrupts","r"); // change . to /proc
+        id = fopen("/proc/interrupts","r"); // change . to /proc
         char lineInterrupts[3][MA];
         for(ll i=0;i<3;i++) fgets(lineInterrupts[i], MA-1, id);
         lineInterrupts[2][lenCPU] = '\0';
@@ -64,7 +64,7 @@ void interrupts(char * commarg[]){
 void newborn(char * commarg[]){ // change . to /proc
     ll n = atoi(commarg[2]);
     while(1){
-        FILE * id = fopen("./loadavg","r");
+        FILE * id = fopen("/proc/loadavg","r");
         ll proc_num;
         char arr[100];
         fscanf(id,"%s %s %s %s %lld",arr,arr,arr,arr,&proc_num);

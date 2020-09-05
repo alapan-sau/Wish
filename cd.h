@@ -1,1 +1,1 @@
-void cd(char *path);
+void cd(long long int, char *commarg[]);

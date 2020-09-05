@@ -8,7 +8,6 @@ void foreProcess(ll n,char *commarg[]){
         exit(0);
     }
     else{
-        printf("%d started\n",getpid());
         wait(NULL);
         return;
     }

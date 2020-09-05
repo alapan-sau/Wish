@@ -25,6 +25,11 @@ char *command;
 char historyarr[20][100];
 ll hisnum;
 
+ll jobtot;
+ll jobindex[MA];
+char *jobs[MA];
+
+
 void getcurdir();
 void execute_command();
 void getcommand();

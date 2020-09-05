@@ -14,11 +14,15 @@ void loadhistory(){
     if(hf){
         int pos;
         ll i = 0;
-        while ((i<20) && fgets(historyarr[i], 100, hf)!= NULL){
+        while ((i<20) && fgets(historyarr[i], MA, hf)!= NULL){
             i++;
         }
         hisnum = i;
         for(;i<20;i++) strcpy(historyarr[i],"");
+        fclose(hf);
+    }
+    else{
+        FILE * hf = fopen("historyfile.txt","w");
         fclose(hf);
     }
 }
@@ -41,7 +45,7 @@ void updatehistory(){
     return;
 }
 
-void getcurdir(){                                                           // stores the current dir to currdir
+void getcurdir(){                                               // stores the current dir to currdir
     getcwd(currdir,MA);
     tilda_adder(currdir);
     return;
@@ -49,6 +53,7 @@ void getcurdir(){                                                           // s
 
 
 void execute_command(){                                                 // command handler
+
     char *allcommands[MA];
     allcommands[0] = strtok(command,";\n");
     ll index = 0;
@@ -66,13 +71,14 @@ void execute_command(){                                                 // comma
         }
         ll totalcommarg = index;
 
+
+
         if(strcmp(commarg[totalcommarg-1],"&")==0){
             backProcess(totalcommarg,commarg);
             continue;
         }
         if(strcmp(commarg[0],"cd")==0){
-            if(totalcommarg==1){cd("~");}
-            else cd(commarg[1]);
+            cd(totalcommarg,commarg);
         }
         else if(strcmp(commarg[0],"mkdir")==0){
             mkdir(commarg[1],0777);
@@ -116,7 +122,7 @@ void execute_command(){                                                 // comma
 
 void getcommand(){                                                  // fetches command from terminal
     size_t size_command = 100;
-    
+
     command = (char *)malloc(size_command);
     getline(&command, &size_command, stdin);
 }
@@ -138,6 +144,8 @@ void reference(){                                                    // prompt f
 }
 
 int main(){
+    hisnum = 0;
+    jobtot=0;
     loadhistory();
     gethomedir();
     while(1){

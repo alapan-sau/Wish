@@ -4,10 +4,13 @@ void sigchld_handler(int signum)                                                
 {
     pid_t pid;
     int   status;
-    // while ((pid = waitpid(-1, &status, WNOHANG)) != -1)
-    // {
-    //     printf("%d ended\n",pid);   // Or whatever you need to do with the PID
-    // }
     pid = waitpid(-1, &status, WNOHANG);
-    if(pid!=-1)printf("%d ended\n",pid);
+    if(pid!=-1){
+        for(ll i=0;i<jobtot;i++){
+            if((ll)pid==jobindex[i]){
+                printf(" Process %s with process ID [%lld] stopped with exit status %d\n",jobs[i],(ll)pid,status);
+                break;
+            }
+        }
+    }
 }
