@@ -288,6 +288,9 @@ void getcommand(){                                                  // fetches c
     size_t size_command = 100;
 
     command = (char *)malloc(size_command);
+    if(command==NULL){
+        printf("Oops! Memory Error!\n");
+    }
     getline(&command, &size_command, stdin);
 }
 

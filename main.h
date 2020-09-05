@@ -31,7 +31,6 @@ char *jobs[MA];
 
 
 void getcurdir();
-void execute_command();
 void getcommand();
 void gethomedir();
 void reference();

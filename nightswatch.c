@@ -14,13 +14,16 @@ int endWatch(ll n){
         size_t size_c = 3;
         char *c;
         c = (char *)malloc(size_c);
+        if(command==NULL){
+            printf("Oops! Memory Error!\n");
+        }
         getline(&c, &size_c, stdin);
         if (c[0] == 'q'){
             printf("Exit Succesfully\n");
             return 1;
         }
         else{
-            printf("Press q to enter\n");
+            printf("Press 'q' + 'Enter' to exit\n");
         }
     }
     return 0;
@@ -29,6 +32,10 @@ int endWatch(ll n){
 void interrupts(char * commarg[]){
     ll n = atoi(commarg[2]);
     FILE * id = fopen("/proc/interrupts","r");  // change . to /proc
+    if(id==NULL){
+        perror("Oops! /proc/interrupts ");
+        return;
+    }
     char lineCPU[MA];
     fgets(lineCPU, MA, id);
     printf("%s\n",lineCPU);
@@ -44,6 +51,10 @@ void interrupts(char * commarg[]){
     lenCPU = strlen(lineCPU);
     while(1){
         id = fopen("/proc/interrupts","r"); // change . to /proc
+        if(id==NULL){
+            perror("Oops! /proc/interrupts ");
+            return;
+        }
         char lineInterrupts[3][MA];
         for(ll i=0;i<3;i++) fgets(lineInterrupts[i], MA-1, id);
         lineInterrupts[2][lenCPU] = '\0';
@@ -65,10 +76,14 @@ void newborn(char * commarg[]){ // change . to /proc
     ll n = atoi(commarg[2]);
     while(1){
         FILE * id = fopen("/proc/loadavg","r");
+        if(id==NULL){
+            perror("Oops! /proc/loadavg ");
+            return;
+        }
         ll proc_num;
         char arr[100];
         fscanf(id,"%s %s %s %s %lld",arr,arr,arr,arr,&proc_num);
-        printf("%lld\n",proc_num);
+        printf("Newest Process : %lld\n",proc_num);
         fclose(id);
         if(endWatch(n)) return;
     }
