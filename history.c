@@ -51,6 +51,11 @@ void history(ll n, char *commarg[]){
         }
         else total = (commarg[1][0]-'0')*10 + (commarg[1][1]-'0');
     }
+    if(total>10 || total<1)
+    {
+        printf("Put a number between 1 to 10!\n");
+        return;
+    }
     if(total > hisnum){
         total=hisnum;
     }

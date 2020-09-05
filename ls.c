@@ -13,14 +13,14 @@ void ls(ll n, char *commarg[]){                                                 
         if(strcmp(commarg[i],"-l")==0){
             flagL=1;
         }
-        if(strcmp(commarg[i],"-a")==0){
+        else if(strcmp(commarg[i],"-a")==0){
             flagA=1;
         }
-        if(strcmp(commarg[i],"-la")==0){
+        else if(strcmp(commarg[i],"-la")==0){
             flagL=1;
             flagA=1;
         }
-        if(strcmp(commarg[i],"-al")==0){
+        else if(strcmp(commarg[i],"-al")==0){
             flagL=1;
             flagA=1;
         }
@@ -36,7 +36,12 @@ void ls(ll n, char *commarg[]){                                                 
     else flag = 0;
 
     if(flagArg==0){
-        commarg[n]=currdir;
+        commarg[n] = malloc(MA*sizeof(char));
+        if(commarg[n]==NULL)
+        {
+            printf("Oops! Memory error!\n");
+        }
+        strcpy(commarg[n],currdir);
         n++;
         totaldir++;
     }

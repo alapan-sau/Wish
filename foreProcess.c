@@ -10,7 +10,7 @@ void foreProcess(ll n,char *commarg[]){
         commarg[n]=NULL;
         ll ret = execvp(commarg[0],commarg);
         if(ret<0){
-            printf("Oops! Invalid command!");
+            printf("Oops! Invalid command!\n");
         }
         exit(0);
     }

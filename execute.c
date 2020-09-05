@@ -46,7 +46,9 @@ void execute_command(){                                                 // comma
                 continue;
             }
             getcurdir();
+            tilda_remover(currdir);
             printf("%s\n",currdir);
+            getcurdir();
         }
         else if(strcmp(commarg[0],"echo")==0){         //  nothing done
             for(ll i=1;i<totalcommarg;i++){

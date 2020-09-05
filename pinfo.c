@@ -24,6 +24,7 @@ void pinfo(ll n, char *commarg[]){                                      // pinfo
     FILE  *procfd = fopen(procfile, "r");
     if(procfd == NULL){
         printf("Process with ID %d does not exist!\n",(int)pid);
+        return;
     }
     else{
         fscanf(procfd, "%*d %*s %c %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %lld %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d", &status, &memory);
