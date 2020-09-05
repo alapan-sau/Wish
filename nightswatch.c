@@ -73,3 +73,41 @@ void newborn(char * commarg[]){ // change . to /proc
         if(endWatch(n)) return;
     }
 }
+
+
+void nightswatch(ll n, char *commarg[]){
+    if(n > 4){
+        printf("nightswatch : too many arguments\n");
+        printf("use nightswatch -n [number] [interrupts/newborn]\n");
+        return;
+    }
+    else if(n < 4){
+        printf("nightswatch : too few arguments\n");
+        printf("use nightswatch -n [number] [interrupts/newborn]\n");
+        return;
+    }
+    else if(n==4){
+        if(strcmp(commarg[1],"-n")){
+            printf("Invalid option!\n");
+            printf("use nightswatch -n [number] [interrupts/newborn]\n");
+            return;
+        }
+        if(atoi(commarg[2])==0){
+            printf("Invalid argument to flag -n\n");
+            printf("use a number > 0!\n");
+            return;
+        }
+        if((strcmp(commarg[3],"interrupts") && strcmp(commarg[3],"newborn"))){
+            printf("Invalid command!\n");
+            printf("use nightswatch -n [number] [interrupts/newborn]\n");
+            return;
+        }
+    }
+    if(strcmp(commarg[3],"interrupts")==0){
+        interrupts(commarg);
+    }
+    else if(strcmp(commarg[3],"newborn")==0){
+        newborn(commarg);
+    }
+    return;
+}

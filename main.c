@@ -77,23 +77,27 @@ void execute_command(){                                                 // comma
             backProcess(totalcommarg,commarg);
             continue;
         }
-        if(strcmp(commarg[0],"cd")==0){
+        if(strcmp(commarg[0],"cd")==0){         // impl err
             cd(totalcommarg,commarg);
         }
-        else if(strcmp(commarg[0],"mkdir")==0){
+        else if(strcmp(commarg[0],"mkdir")==0){   // impl
             mkdir(commarg[1],0777);
         }
-        else if(strcmp(commarg[0],"pwd")==0){
+        else if(strcmp(commarg[0],"pwd")==0){    // impl err
+            if(totalcommarg>1){
+                printf("pwd : too many arguments\n");
+                continue;
+            }
             getcurdir();
             printf("%s\n",currdir);
         }
-        else if(strcmp(commarg[0],"echo")==0){
+        else if(strcmp(commarg[0],"echo")==0){         //  nothing done
             for(ll i=1;i<totalcommarg;i++){
                 printf("%s ",commarg[i]);
             }
             printf("\n");
         }
-        else if(strcmp(commarg[0],"ls")==0){
+        else if(strcmp(commarg[0],"ls")==0){            // impl error
             ls(totalcommarg,commarg);
         }
         else if(strcmp(commarg[0],"q")==0){
@@ -106,12 +110,7 @@ void execute_command(){                                                 // comma
             history(totalcommarg,commarg);
         }
         else if(strcmp(commarg[0],"nightswatch")==0){
-            if(strcmp(commarg[3],"interrupts")==0){
-                interrupts(commarg);
-            }
-            if(strcmp(commarg[3],"newborn")==0){
-                newborn(commarg);
-            }
+            nightswatch(totalcommarg,commarg);
         }
         else{
             foreProcess(totalcommarg,commarg);
