@@ -10,21 +10,19 @@ void ls(ll n, char *commarg[]){                                                 
 
     ll totaldir = 0;
     for(ll i=1;i<n;i++){
-        if(commarg[i][0]=='-'){
-            if(strcmp(commarg[i],"-l")==0){
-                flagL=1;
-            }
-            if(strcmp(commarg[i],"-a")==0){
-                flagA=1;
-            }
-            if(strcmp(commarg[i],"-la")==0){
-                flagL=1;
-                flagA=1;
-            }
-            if(strcmp(commarg[i],"-al")==0){
-                flagL=1;
-                flagA=1;
-            }
+        if(strcmp(commarg[i],"-l")==0){
+            flagL=1;
+        }
+        if(strcmp(commarg[i],"-a")==0){
+            flagA=1;
+        }
+        if(strcmp(commarg[i],"-la")==0){
+            flagL=1;
+            flagA=1;
+        }
+        if(strcmp(commarg[i],"-al")==0){
+            flagL=1;
+            flagA=1;
         }
         else{
             flagArg=1;
@@ -47,7 +45,7 @@ void ls(ll n, char *commarg[]){                                                 
 
     for(ll i=1;i<n;i++){
 
-        if(commarg[i][0]=='-')continue;
+        if( !( strcmp(commarg[i],"-l") && strcmp(commarg[i],"-a") && strcmp(commarg[i],"-al") && strcmp(commarg[i],"-la") ) )continue;
         totaldir--;
         strcpy(path,commarg[i]);
 
@@ -55,6 +53,12 @@ void ls(ll n, char *commarg[]){                                                 
 
         struct dirent *newfile;
         DIR *mydir = opendir(path);
+        if(mydir==NULL){
+            char errormes[MA];
+            sprintf(errormes,"ls %s",path);
+            perror(errormes);
+            continue;
+        }
         struct stat mystat;
         while((newfile = readdir(mydir)) != NULL){
             if(flag==4)printf("%s\n", newfile->d_name);
