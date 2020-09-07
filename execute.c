@@ -34,13 +34,10 @@ void execute_command(){                                                 // comma
             backProcess(totalcommarg,commarg);
             continue;
         }
-        if(strcmp(commarg[0],"cd")==0){         // impl err
+        if(strcmp(commarg[0],"cd")==0){
             cd(totalcommarg,commarg);
         }
-        else if(strcmp(commarg[0],"mkdir")==0){   // impl
-            mkdir(commarg[1],0777);
-        }
-        else if(strcmp(commarg[0],"pwd")==0){    // impl err
+        else if(strcmp(commarg[0],"pwd")==0){
             if(totalcommarg>1){
                 printf("pwd : too many arguments\n");
                 continue;
@@ -50,19 +47,19 @@ void execute_command(){                                                 // comma
             printf("%s\n",currdir);
             getcurdir();
         }
-        else if(strcmp(commarg[0],"echo")==0){         //  nothing done
+        else if(strcmp(commarg[0],"echo")==0){
             for(ll i=1;i<totalcommarg;i++){
                 printf("%s ",commarg[i]);
             }
             printf("\n");
         }
-        else if(strcmp(commarg[0],"ls")==0){            // impl error
+        else if(strcmp(commarg[0],"ls")==0){
             ls(totalcommarg,commarg);
         }
-        else if(strcmp(commarg[0],"quit")==0){             // killing background processes!
+        else if(strcmp(commarg[0],"quit")==0){
             for(ll i=0;i<jobtot;i++){
                 // printf("%lld\n",jobindex[i]);
-                kill(jobindex[i], SIGKILL);
+                kill(jobindex[i], SIGKILL);     // killing background processes to solve vim errors!
             }
             exit(0);
         }

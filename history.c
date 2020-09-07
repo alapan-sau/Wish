@@ -1,6 +1,6 @@
 #include "main.h"
 
-void loadhistory(){
+void loadhistory(){                           // initial call to detect/read/create historytext.file
     char HISTORYFILE[MA];
     sprintf(HISTORYFILE,"%s/historyfile.txt",homedir);
     FILE * hf =  fopen(HISTORYFILE,"r");
@@ -20,7 +20,7 @@ void loadhistory(){
     }
 }
 
-void updatehistory(){
+void updatehistory(){                           // updates history after every command
     char HISTORYFILE[MA];
     sprintf(HISTORYFILE,"%s/historyfile.txt",homedir);
     if(strcmp(command,"")==0) return;
@@ -40,7 +40,7 @@ void updatehistory(){
     return;
 }
 
-void history(ll n, char *commarg[]){
+void history(ll n, char *commarg[]){           // history function
     ll total=0;
     if(n==1){
         total=5;

@@ -2,7 +2,7 @@
 #include "util.h"
 
 
-void ls(ll n, char *commarg[]){                                                 // ls -l -la -a ...
+void ls(ll n, char *commarg[]){                                                 // ls
 
     ll flagArg=0;
     ll flagA=0;
@@ -29,7 +29,7 @@ void ls(ll n, char *commarg[]){                                                 
             totaldir++;
         }
     }
-    ll flag = 0;                                                        // normal ls=0, ls -l=1, ls -la=2, ls -a=4,
+    ll flag = 0;                                     // flag : ls=0, ls -l=1, ls -la=2, ls -a=4,
     if(flagA && flagL) flag = 2;
     else if(flagA) flag = 4;
     else if(flagL) flag = 1;
@@ -65,7 +65,7 @@ void ls(ll n, char *commarg[]){                                                 
             continue;
         }
         struct stat mystat;
-        while((newfile = readdir(mydir)) != NULL){
+        while((newfile = readdir(mydir)) != NULL){               // reads directory links one by one
             if(flag==4)printf("%s\n", newfile->d_name);
             else if(flag==0){
                 if(newfile->d_name[0]!='.')printf("%s\n", newfile->d_name);

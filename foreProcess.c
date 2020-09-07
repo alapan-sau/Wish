@@ -14,9 +14,9 @@ void foreProcess(ll n,char *commarg[]){
         }
         exit(0);
     }
-    else{
+    else{                                                              // parent process
         int status;
-        waitpid(forkReturn,&status,WUNTRACED);
+        waitpid(forkReturn,&status,WUNTRACED);                         // waits for child process(fg)
         return;
     }
 }

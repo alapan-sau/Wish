@@ -14,7 +14,7 @@ void getcurdir(){                                               // stores the cu
     return;
 }
 
-void getcommand(){                                                  // fetches command from terminal
+void getcommand(){                                                // fetches command from terminal
     size_t size_command = 100;
 
     command = (char *)malloc(size_command);
@@ -33,24 +33,24 @@ void gethomedir(){                                                  // stores ho
     return;
 }
 
-void reference(){                                                    // prompt fx
+void reference(){                                                    // prompt function
     char username[MA];
     char hostname[MA];
     char reference[MA];
-    getlogin_r(username,MA);
-    gethostname(hostname,MA);
+    getlogin_r(username,MA);                                          //fetches username
+    gethostname(hostname,MA);                                         //fetches hostname
     getcurdir();
     sprintf(reference,"\033[0;91m<%s@%s:\033[0;93m%s\033[0;91m> \033[0m",username,hostname,currdir);
     printf("%s",reference);
 }
 
 int main(){
-    hisnum = 0;
-    jobtot=0;
+    hisnum = 0;                                                     // total elements in historyarr
+    jobtot=0;                                                       // total number of bg processes
     gethomedir();
     loadhistory();
     while(1){
-        signal(SIGCHLD, sigchld_handler);
+        signal(SIGCHLD, sigchld_handler);                           // checks for any child termination signal
         reference();
         getcommand();
         updatehistory();

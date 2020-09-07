@@ -2,8 +2,8 @@
 
 void backProcess(ll n, char *commarg[]){
     ll forkReturn = fork();
-    setpgrp();  // setting process ID to process grp ID;
-    // setpgid(0,0);
+    setpgrp();                                              // setting process ID to process grp ID;
+    // setpgid(0,0);                                        // same thing can be done using
     if(forkReturn<0){
         printf("Oops! Unable to fork!\n");
         return;
@@ -11,15 +11,15 @@ void backProcess(ll n, char *commarg[]){
     if(forkReturn==0){                                                // background/child process
         commarg[n-1]=NULL;
         pid_t pid = getpid();
-        ll ret = execvp(commarg[0],commarg);
+        ll ret = execvp(commarg[0],commarg);                          // executes executable files
         if(ret<0){
             printf("Oops! Invalid command!");
         }
         exit(0);
     }
     else{
-        ll len = strlen(commarg[0]);
-        jobindex[jobtot]=forkReturn;
+        ll len = strlen(commarg[0]);                                   // parent process
+        jobindex[jobtot]=forkReturn;                                   // push created child to jobs
         jobs[jobtot] = malloc(len * sizeof(char));
         if(command==NULL){
             printf("Oops! Memory Error!\n");
