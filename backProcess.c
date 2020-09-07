@@ -2,6 +2,8 @@
 
 void backProcess(ll n, char *commarg[]){
     ll forkReturn = fork();
+    setpgrp();  // setting process ID to process grp ID;
+    // setpgid(0,0);
     if(forkReturn<0){
         printf("Oops! Unable to fork!\n");
         return;

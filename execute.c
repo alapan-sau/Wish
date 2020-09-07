@@ -59,7 +59,11 @@ void execute_command(){                                                 // comma
         else if(strcmp(commarg[0],"ls")==0){            // impl error
             ls(totalcommarg,commarg);
         }
-        else if(strcmp(commarg[0],"q")==0){
+        else if(strcmp(commarg[0],"q")==0){             // killing background processes!
+            for(ll i=0;i<jobtot;i++){
+                // printf("%lld\n",jobindex[i]);
+                kill(jobindex[i], SIGKILL);
+            }
             exit(0);
         }
         else if(strcmp(commarg[0],"pinfo")==0){
