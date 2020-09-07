@@ -46,7 +46,7 @@ void execute_command(){                                                 // comma
                 continue;
             }
             getcurdir();
-            tilda_remover(currdir);
+            tilda_adder(currdir);
             printf("%s\n",currdir);
             getcurdir();
         }
@@ -59,7 +59,7 @@ void execute_command(){                                                 // comma
         else if(strcmp(commarg[0],"ls")==0){            // impl error
             ls(totalcommarg,commarg);
         }
-        else if(strcmp(commarg[0],"q")==0){             // killing background processes!
+        else if(strcmp(commarg[0],"quit")==0){             // killing background processes!
             for(ll i=0;i<jobtot;i++){
                 // printf("%lld\n",jobindex[i]);
                 kill(jobindex[i], SIGKILL);

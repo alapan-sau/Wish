@@ -6,7 +6,10 @@
 
 
 void getcurdir(){                                               // stores the current dir to currdir
-    getcwd(currdir,MA);
+    if(getcwd(currdir,MA)==NULL){
+        perror("");
+        exit(0);
+    }
     tilda_adder(currdir);
     return;
 }
@@ -22,7 +25,11 @@ void getcommand(){                                                  // fetches c
 }
 
 void gethomedir(){                                                  // stores home dir to homedir
-    getcwd(homedir,MA);
+    if(getcwd(homedir,MA)==NULL){
+        perror("");
+        exit(0);
+    }
+
     return;
 }
 
