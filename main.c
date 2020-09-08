@@ -14,7 +14,7 @@ void getcurdir(){                                               // stores the cu
     return;
 }
 
-void getcommand(){                                                // fetches command from terminal
+void getcommand(){              // Take input                                            // fetches command from terminal
     size_t size_command = 100;
 
     command = (char *)malloc(size_command);
@@ -33,7 +33,7 @@ void gethomedir(){                                                  // stores ho
     return;
 }
 
-void reference(){                                                    // prompt function
+void reference(){              // Get values for prompt                                       // prompt function
     char username[MA];
     char hostname[MA];
     char reference[MA];
