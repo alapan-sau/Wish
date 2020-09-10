@@ -45,11 +45,11 @@ void reference(){              // Get values for prompt                         
 }
 
 int main(){
+    printf("\033[0;91m\n\n\t\t\t Welcome to C shell\n\n");
     hisnum = 0;                                                     // total elements in historyarr
     jobtot=0;                                                       // total number of bg processes
     gethomedir();
     loadhistory();
-    printf("\033[0;91m\n\n\t\t\t Welcome to C shell\n\n ");
     while(1){
         signal(SIGCHLD, sigchld_handler);                           // checks for any child termination signal
         reference();

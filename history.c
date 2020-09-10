@@ -43,17 +43,21 @@ void updatehistory(){                           // updates history after every c
 void history(ll n, char *commarg[]){           // history function
     ll total=0;
     if(n==1){
-        total=5;
+        total=10;
     }
     else{
+        if(strlen(commarg[1])>2){
+            printf("Put a number between 1 to 20!\n");
+            return;
+        }
         if(strlen(commarg[1])==1){
             total = commarg[1][0]-'0';
         }
         else total = (commarg[1][0]-'0')*10 + (commarg[1][1]-'0');
     }
-    if(total>10 || total<1)
+    if(total>20 || total<1)
     {
-        printf("Put a number between 1 to 10!\n");
+        printf("Put a number between 1 to 20!\n");
         return;
     }
     if(total > hisnum){
