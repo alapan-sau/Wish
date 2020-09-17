@@ -5,7 +5,7 @@
 #include "sigchld_handler.h"
 
 
-void getcurdir(){                                               // stores the current dir to currdir
+void getcurdir(){                                       // stores the current dir to currdir
     if(getcwd(currdir,MA)==NULL){
         perror("");
         exit(0);
@@ -14,7 +14,7 @@ void getcurdir(){                                               // stores the cu
     return;
 }
 
-void getcommand(){              // Take input                                            // fetches command from terminal
+void getcommand(){                                          // fetches command from terminal
     size_t size_command = 100;
 
     command = (char *)malloc(size_command);
@@ -24,7 +24,7 @@ void getcommand(){              // Take input                                   
     getline(&command, &size_command, stdin);
 }
 
-void gethomedir(){                                                  // stores home dir to homedir
+void gethomedir(){                                             // stores home dir to homedir
     if(getcwd(homedir,MA)==NULL){
         perror("");
         exit(0);
@@ -33,7 +33,7 @@ void gethomedir(){                                                  // stores ho
     return;
 }
 
-void reference(){              // Get values for prompt                                       // prompt function
+void reference(){                                                     // prompt function
     char username[MA];
     char hostname[MA];
     char reference[MA];
@@ -47,12 +47,12 @@ void reference(){              // Get values for prompt                         
 int main(){
 
     printf("\033[0;91m\n\n\t\t\t Welcome to C shell\n\n");
-    hisnum = 0;                                                     // total elements in historyarr
-    jobtot=0;                                                       // total number of bg processes
+    hisnum = 0;                                                    // total elements in historyarr
+    jobtot=0;                                                      // total number of bg processes
     gethomedir();
     loadhistory();
     while(1){
-        signal(SIGCHLD, sigchld_handler);                           // checks for any child termination signal
+        signal(SIGCHLD, sigchld_handler);                          // checks for any child termination signal
         reference();
         getcommand();
         updatehistory();
