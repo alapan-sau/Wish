@@ -13,20 +13,21 @@ void backProcess(ll n, char *commarg[]){
         pid_t pid = getpid();
         ll ret = execvp(commarg[0],commarg);                          // executes executable files
         if(ret<0){
-            printf("Oops! Invalid command!");
+            printf("Oops! Invalid command!\n");
         }
         exit(0);
     }
     else{
         ll len = strlen(commarg[0]);                                   // parent process
         jobindex[jobtot]=forkReturn;                                   // push created child to jobs
-        jobs[jobtot] = malloc(len * sizeof(char));
+        jobarr[jobtot] = malloc(len * sizeof(char));
         if(command==NULL){
             printf("Oops! Memory Error!\n");
         }
-        strcpy(jobs[jobtot],commarg[0]);
+        strcpy(jobarr[jobtot],commarg[0]);
+        jobstat[jobtot]=1;
         jobtot++;
-        printf("[%lld] started %s\n",jobindex[jobtot-1],jobs[jobtot-1]);
+        printf("[%lld] started %s\n",jobindex[jobtot-1],jobarr[jobtot-1]);
         return;
     }
 }

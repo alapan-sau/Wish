@@ -27,7 +27,8 @@ ll hisnum;
 
 ll jobtot;
 ll jobindex[MA];
-char *jobs[MA];
+char *jobarr[MA];
+ll jobstat[MA];
 
 
 void getcurdir();

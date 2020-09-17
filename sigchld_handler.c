@@ -8,7 +8,8 @@ void sigchld_handler(int signum)                                                
     if(pid!=-1){
         for(ll i=0;i<jobtot;i++){
             if((ll)pid==jobindex[i]){
-                printf(" Process %s with process ID [%lld] stopped with exit status %d\n",jobs[i],(ll)pid,status);
+                jobstat[i]=-1;
+                printf(" Process %s with process ID [%lld] stopped with exit status %d\n",jobarr[i],(ll)pid,status);
                 break;
             }
         }

@@ -45,6 +45,7 @@ void reference(){              // Get values for prompt                         
 }
 
 int main(){
+
     printf("\033[0;91m\n\n\t\t\t Welcome to C shell\n\n");
     hisnum = 0;                                                     // total elements in historyarr
     jobtot=0;                                                       // total number of bg processes
