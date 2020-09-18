@@ -2,7 +2,8 @@
 #include "history.h"
 #include "util.h"
 #include "execute.h"
-#include "sigchld_handler.h"
+#include "overkill.h"
+#include "signal_handlers.h"
 
 
 void getcurdir(){                                       // stores the current dir to currdir
@@ -21,7 +22,12 @@ void getcommand(){                                          // fetches command f
     if(command==NULL){
         printf("Oops! Memory Error!\n");
     }
-    getline(&command, &size_command, stdin);
+    int ctrld = getline(&command, &size_command, stdin);
+    if(ctrld == -1){
+        printf("\n");
+        overkill();
+        exit(0);
+    }
 }
 
 void gethomedir(){                                             // stores home dir to homedir
@@ -50,9 +56,13 @@ int main(){
     hisnum = 0;                                                    // total elements in historyarr
     jobtot=0;                                                      // total number of bg processes
     gethomedir();
+    strcpy(prevdir,homedir);
     loadhistory();
+    latest_fore_pid=-1;
     while(1){
         signal(SIGCHLD, sigchld_handler);                          // checks for any child termination signal
+        signal(SIGINT,sigint_handler);
+        signal(SIGTSTP,sigtstp_handler);
         reference();
         getcommand();
         updatehistory();

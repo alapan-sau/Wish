@@ -16,7 +16,11 @@ void foreProcess(ll n,char *commarg[]){
     }
     else{                                                              // parent process
         int status;
+        latest_fore_pid = forkReturn;
+        strcpy(latest_fore_process_name,commarg[0]); 
         waitpid(forkReturn,&status,WUNTRACED);                         // waits for child process(fg)
+        latest_fore_pid=-1;
+
         return;
     }
 }

@@ -19,6 +19,7 @@
 
 char homedir[MA];
 char currdir[MA];
+char prevdir[MA];
 
 char *command;
 
@@ -29,6 +30,9 @@ ll jobtot;
 ll jobindex[MA];
 char *jobarr[MA];
 ll jobstat[MA];
+
+ll latest_fore_pid;
+char latest_fore_process_name[MA];
 
 
 void getcurdir();

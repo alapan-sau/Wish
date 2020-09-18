@@ -4,7 +4,7 @@
 #include "history.h"
 #include "ls.h"
 #include "pinfo.h"
-#include "sigchld_handler.h"
+#include "signal_handlers.h"
 #include "cd.h"
 #include "nightswatch.h"
 #include "jobs.h"
