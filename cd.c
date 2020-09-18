@@ -12,8 +12,10 @@ void cd(ll n,char *commarg[]){                                                  
         }
     }
     else {
-        tilda_remover(commarg[1]);
-        if(chdir(commarg[1])<0){
+        char path[MA];
+        strcpy(path,commarg[1]);
+        tilda_remover(path);
+        if(chdir(path)<0){
             perror("cd ");
         }
     }

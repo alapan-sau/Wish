@@ -15,16 +15,8 @@
 
 void command_handler(char *curr_command){
     char *commarg[MA];
-    ll index = 0;
-
-///////////////////////////////////////////
-    commarg[0] = strtok(curr_command," \t");
-    index = 0;
-    while(commarg[index]!=NULL){
-        commarg[++index] = strtok(NULL," \t");
-    }
-    ll totalcommarg = index;
-/////////////////////////////////////////////
+    ll totalcommarg = 0;
+    tokenizer(commarg,curr_command," \t",&totalcommarg);
 
     if(strcmp(commarg[totalcommarg-1],"&")==0){
         backProcess(totalcommarg,commarg);
@@ -102,17 +94,85 @@ void command_handler(char *curr_command){
         return;
     }
 }
+
+void redirecter(char *undirected){
+
+    char *core_command;
+    char *infile;
+    char *outfile;
+
+    core_command = strtok(undirected,">");
+    outfile =strtok(NULL,"");                                       // contains >+file/file/NULL"
+    core_command = strtok(core_command,"<");                        // contains file/NULL"
+    infile = strtok(NULL,"");                                       // conatins file/NULL
+
+    if(infile!=NULL){
+        ll len =strlen(infile);
+
+        ll i;
+        for(i=0;i<len;i++){
+            if(infile[i]!=' ' && infile[i]!='\t') break;
+        }
+        infile+=i;
+        infile = strtok(infile," \t");
+    }
+
+    ll flag = 0;
+    if(outfile!=NULL){
+        if(outfile[0]=='>')flag = 1;  //append
+        else flag = 0;  //overwrite
+
+        ll len =strlen(outfile);
+        ll i;
+        for(i=0;i<len;i++){
+            if(outfile[i]!='>' && outfile[i]!=' ') break;
+        }
+        outfile+=i;
+        outfile = strtok(outfile," \t");
+    }
+
+    //printf("%s %s %s\n",core_command,infile,outfile);
+
+    int actual_cin = dup(0);
+    int actual_cout = dup(1);
+    ll in=0,out=1;
+
+    if(infile!=NULL){
+        tilda_remover(infile);
+        in = open(infile,O_RDONLY);
+        if(in<0){
+            tilda_adder(infile);
+            perror(infile);
+        }
+    }
+    if(outfile!=NULL){
+        tilda_remover(outfile);
+        if(flag==1) out=open(outfile,O_WRONLY|O_CREAT|O_APPEND,0644);
+        else out=open(outfile,O_WRONLY|O_CREAT|O_TRUNC,0644);
+
+        if(out<0){
+            tilda_adder(outfile);
+            perror(outfile);
+        }
+    }
+    if(in < 0 || out < 0) return;
+    dup2(in,STDIN_FILENO);
+    dup2(out,STDOUT_FILENO);
+    command_handler(core_command);
+
+    if(in!=0)close(in);
+    if(out!=1)close(out);
+
+    dup2(actual_cin,STDIN_FILENO);
+    dup2(actual_cout,STDOUT_FILENO);
+
+}
+
 void piper(char *pipe_command){
     char *unpiped_commands[MA];
+    ll total_unpiped_commands = 0;
+    tokenizer(unpiped_commands,pipe_command,"|",&total_unpiped_commands);
 
-////////////////////////////////////////////////////
-    unpiped_commands[0] = strtok(pipe_command,"|");
-    ll index = 0;
-    while(unpiped_commands[index]!=NULL){
-        unpiped_commands[++index] = strtok(NULL,"|");
-    }
-    ll total_unpiped_commands = index;
-//////////////////////////////////////////////////////
     int actual_cin = dup(0);
     int actual_cout = dup(1);
 
@@ -121,23 +181,24 @@ void piper(char *pipe_command){
     for(ll i=0;i<total_unpiped_commands;i++){
 
         if(i==(total_unpiped_commands-1)){
-            command_handler(unpiped_commands[i]);
+            redirecter(unpiped_commands[i]);
             if(i!=0)close(fd[!(i%2)][0]);
         }
         else{
             if(pipe(fd[i%2]) == -1){
-		        printf("Shit\n");
-		        exit(0);
+		        printf("Pipe creation makes an issue\n");
+		        return;
 	        }
             pid_t forkReturn = fork();
             if(forkReturn<0){
-		        printf("Shit\n");
-		        exit(0);
+		        printf("Couldn't perform fork()\n");
+		        return;
             }
             if(forkReturn==0){
                 close(fd[i%2][0]);
                 dup2(fd[i%2][1], 1);
-		        command_handler(unpiped_commands[i]);
+		        redirecter(unpiped_commands[i]);
+
 		        close(fd[i%2][1]);
 		        exit(0);
             }
@@ -155,15 +216,8 @@ void piper(char *pipe_command){
 
 void execute_command(){                                                 // command handler
     char *allcommands[MA];
-///////////////////////////////////////////////
-    allcommands[0] = strtok(command,";\n");
-    ll index = 0;
-    while(allcommands[index]!=NULL){
-        allcommands[++index] = strtok(NULL,";\n");
-    }
-    ll totalcommands = index;
-////////////////////////////////////////////////
-
+    ll totalcommands=0;
+    tokenizer(allcommands,command,";\n",&totalcommands);
 
     for(ll task=0;task<totalcommands;task++){
         piper(allcommands[task]);

@@ -17,9 +17,19 @@ void tilda_adder(char *path){
 
 void tilda_remover(char *path){
     if(path[0]=='~'){
-        char address[MA];
+        char *address;
+        address = malloc(100*sizeof(char));
         strcpy(address,homedir);
         strcat(address,path+1);
         strcpy(path,address);
     }
+}
+
+void tokenizer(char *token[],char *str,char *delim, ll *total){
+    token[0] = strtok(str,delim);
+    ll index = 0;
+    while(token[index]!=NULL){
+        token[++index] = strtok(NULL,delim);
+    }
+    *total = index;
 }
