@@ -11,6 +11,7 @@
 #include "kjob.h"
 #include "overkill.h"
 #include "fg.h"
+#include "bg.h"
 #include "util.h"
 
 void command_handler(char *curr_command){
@@ -88,6 +89,9 @@ void command_handler(char *curr_command){
     }
     else if(strcmp(commarg[0],"fg")==0){
         fg(totalcommarg,commarg);
+    }
+    else if(strcmp(commarg[0],"bg")==0){
+        bg(totalcommarg,commarg);
     }
     else{
         foreProcess(totalcommarg,commarg);

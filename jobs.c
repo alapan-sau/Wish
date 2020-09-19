@@ -12,6 +12,7 @@ void jobs(ll n, char *commarg[]){
             sprintf(procfile, "/proc/%lld/stat", jobindex[i]);
             char status;
             FILE  *procfd = fopen(procfile, "r");
+            if(procfd==NULL) continue;
             fscanf(procfd, "%*d %*s %c %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*lld %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d", &status);
             fclose(procfd);
 
