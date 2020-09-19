@@ -18,6 +18,7 @@ void cd(ll n,char *commarg[]){                                                  
         strcpy(path,commarg[1]);
         if(strcmp(commarg[1],"-")==0){
             strcpy(path,prevdir);
+            printf("%s\n",prevdir);
         }
         getcurdir();
         strcpy(prevdir,currdir);
