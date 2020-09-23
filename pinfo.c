@@ -4,6 +4,7 @@
 void pinfo(ll n, char *commarg[]){                                      // pinfo
     if(n>2){
         fprintf(stderr,"pinfo : too many arguments!\n");
+        latest_status=0;
         return;
     }
     pid_t pid;
@@ -12,6 +13,7 @@ void pinfo(ll n, char *commarg[]){                                      // pinfo
 
     if(pid==0){
         fprintf(stderr,"Not a valid process ID!\n");
+        latest_status=0;
         return;
     }
     char procfile[1000];
@@ -24,6 +26,7 @@ void pinfo(ll n, char *commarg[]){                                      // pinfo
     FILE  *procfd = fopen(procfile, "r");
     if(procfd == NULL){
         fprintf(stderr,"Process with ID %d does not exist!\n",(int)pid);
+        latest_status=0;
         return;
     }
     else{
