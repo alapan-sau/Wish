@@ -34,6 +34,8 @@ ll jobstat[MA];
 ll latest_fore_pid;
 char latest_fore_process_name[MA];
 
+int latest_status;
+
 
 void getcurdir();
 void getcommand();

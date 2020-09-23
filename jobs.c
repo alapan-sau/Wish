@@ -2,11 +2,13 @@
 #include "util.h"
 
 void jobs(ll n, char *commarg[]){
-    if(n>1)printf("too many arguments!\n");
+    if(n>1){
+        printf("too many arguments!\n");
+        latest_status=0;
+    }
     else{
         for(ll i=0;i<jobtot;i++){
             if(jobstat[i]==-1)continue;
-
 
             char procfile[1000];
             sprintf(procfile, "/proc/%lld/stat", jobindex[i]);

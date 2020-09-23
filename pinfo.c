@@ -3,7 +3,7 @@
 
 void pinfo(ll n, char *commarg[]){                                      // pinfo
     if(n>2){
-        printf("pinfo : too many arguments!\n");
+        fprintf(stderr,"pinfo : too many arguments!\n");
         return;
     }
     pid_t pid;
@@ -11,7 +11,7 @@ void pinfo(ll n, char *commarg[]){                                      // pinfo
     else pid = atoi(commarg[1]);
 
     if(pid==0){
-        printf("Not a valid process ID!\n");
+        fprintf(stderr,"Not a valid process ID!\n");
         return;
     }
     char procfile[1000];
@@ -23,7 +23,7 @@ void pinfo(ll n, char *commarg[]){                                      // pinfo
     ll memory;
     FILE  *procfd = fopen(procfile, "r");
     if(procfd == NULL){
-        printf("Process with ID %d does not exist!\n",(int)pid);
+        fprintf(stderr,"Process with ID %d does not exist!\n",(int)pid);
         return;
     }
     else{
@@ -36,7 +36,7 @@ void pinfo(ll n, char *commarg[]){                                      // pinfo
     char procadd[MA];
     int len = readlink(execfile, procadd, sizeof(procadd));
     if(len<0){
-        printf("No path for executable related to the process ID %d found!\n",(int)pid);
+        fprintf(stderr,"No path for executable related to the process ID %d found!\n",(int)pid);
     }
     else{
         procadd[len] = '\0';

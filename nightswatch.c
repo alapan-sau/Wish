@@ -15,15 +15,16 @@ int endWatch(ll n){
         char *c;
         c = (char *)malloc(size_c);
         if(command==NULL){
-            printf("Oops! Memory Error!\n");
+            fprintf(stderr,"Oops! Memory Error!\n");
+            latest_status=0;
         }
         getline(&c, &size_c, stdin);
         if (c[0] == 'q'){
-            printf("Exit Succesfully\n");
+            fprintf(stderr,"Exit Succesfully\n");
             return 1;
         }
         else{
-            printf("Press 'q' + 'Enter' to exit\n");
+            fprintf(stderr,"Press 'q' + 'Enter' to exit\n");
         }
     }
     return 0;
@@ -34,6 +35,7 @@ void interrupts(char * commarg[]){
     FILE * id = fopen("/proc/interrupts","r");  // change . to /proc
     if(id==NULL){
         perror("Oops! /proc/interrupts ");
+        latest_status=0;
         return;
     }
     char lineCPU[MA];
@@ -53,6 +55,7 @@ void interrupts(char * commarg[]){
         id = fopen("/proc/interrupts","r"); // change . to /proc
         if(id==NULL){
             perror("Oops! /proc/interrupts ");
+            latest_status=0;
             return;
         }
         char lineInterrupts[3][MA];
@@ -78,6 +81,7 @@ void newborn(char * commarg[]){ // change . to /proc
         FILE * id = fopen("/proc/loadavg","r");
         if(id==NULL){
             perror("Oops! /proc/loadavg ");
+            latest_status=0;
             return;
         }
         ll proc_num;
@@ -92,29 +96,34 @@ void newborn(char * commarg[]){ // change . to /proc
 
 void nightswatch(ll n, char *commarg[]){
     if(n > 4){
-        printf("nightswatch : too many arguments\n");
-        printf("use nightswatch -n [number] [interrupts/newborn]\n");
+        latest_status=0;
+        fprintf(stderr,"nightswatch : too many arguments\n");
+        fprintf(stderr,"use nightswatch -n [number] [interrupts/newborn]\n");
         return;
     }
     else if(n < 4){
-        printf("nightswatch : too few arguments\n");
-        printf("use nightswatch -n [number] [interrupts/newborn]\n");
+        latest_status=0;
+        fprintf(stderr,"nightswatch : too few arguments\n");
+        fprintf(stderr,"use nightswatch -n [number] [interrupts/newborn]\n");
         return;
     }
     else if(n==4){
+        latest_status=0;
         if(strcmp(commarg[1],"-n")){
-            printf("Invalid option!\n");
-            printf("use nightswatch -n [number] [interrupts/newborn]\n");
+            fprintf(stderr,"Invalid option!\n");
+            fprintf(stderr,"use nightswatch -n [number] [interrupts/newborn]\n");
             return;
         }
         if(atoi(commarg[2])==0){
-            printf("Invalid argument to flag -n\n");
-            printf("use a number > 0!\n");
+            latest_status=0;
+            fprintf(stderr,"Invalid argument to flag -n\n");
+            fprintf(stderr,"use a number > 0!\n");
             return;
         }
         if((strcmp(commarg[3],"interrupts") && strcmp(commarg[3],"newborn"))){
-            printf("Invalid command!\n");
-            printf("use nightswatch -n [number] [interrupts/newborn]\n");
+            latest_status=0;
+            fprintf(stderr,"Invalid command!\n");
+            fprintf(stderr,"use nightswatch -n [number] [interrupts/newborn]\n");
             return;
         }
     }

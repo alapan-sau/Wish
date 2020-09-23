@@ -20,7 +20,7 @@ void getcommand(){                                          // fetches command f
 
     command = (char *)malloc(size_command);
     if(command==NULL){
-        printf("Oops! Memory Error!\n");
+        fprintf(stderr,"Oops! Memory Error!\n");
     }
     int ctrld = getline(&command, &size_command, stdin);
     if(ctrld == -1){
@@ -39,20 +39,27 @@ void gethomedir(){                                             // stores home di
     return;
 }
 
-void reference(){                                                     // prompt function
+void reference(){                                                 // prompt function
+    char emotion[MA];
+    if(latest_status==1){
+        strcpy(emotion,":')");
+    }
+    else{
+        strcpy(emotion,":'(");
+    }
     char username[MA];
     char hostname[MA];
     char reference[MA];
     getlogin_r(username,MA);                                          //fetches username
     gethostname(hostname,MA);                                         //fetches hostname
     getcurdir();
-    sprintf(reference,"\033[0;91m<%s@%s:\033[0;93m%s\033[0;91m> \033[0m",username,hostname,currdir);
+    sprintf(reference,"%s \033[0;91m<%s@%s:\033[0;93m%s\033[0;91m> \033[0m",emotion,username,hostname,currdir);
     printf("%s",reference);
 }
 
 int main(){
-
-    printf("\033[0;91m\n\n\t\t\t Welcome to C shell\n\n");
+    latest_status=1;
+    printf("\033[0;91m\n\n\t\t\t Welcome to C shell\n\n\033[0m");
     hisnum = 0;                                                    // total elements in historyarr
     jobtot=0;                                                      // total number of bg processes
     gethomedir();
@@ -65,7 +72,11 @@ int main(){
         signal(SIGTSTP,sigtstp_handler);
         reference();
         getcommand();
-        updatehistory();
+        if(updatehistory()==0){
+            latest_status=0;
+            continue;
+        }
+        latest_status=1;
         execute_command();
     }
 }

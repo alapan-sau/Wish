@@ -20,11 +20,19 @@ void loadhistory(){                           // initial call to detect/read/cre
     }
 }
 
-void updatehistory(){                           // updates history after every command
+int updatehistory(){                           // updates history after every command
     char HISTORYFILE[MA];
     sprintf(HISTORYFILE,"%s/historyfile.txt",homedir);
-    if(strcmp(command,"")==0) return;
-    if(strcmp(command,historyarr[0])==0) return;
+    if(strcmp(command,"\n")==0 || strcmp(command,"")==0) return 0;
+    if(strcmp(command,historyarr[0])==0) return 1;
+    ll len = strlen(command);
+    ll f=0;
+    for(ll i=0;i<len;i++){
+        if(command[i]!=' ' && command[i]!='\t' && command[i]!='\n'){
+            f=1;
+        }
+    }
+    if(f==0) return 0;
     if(hisnum<20) hisnum++;
     for(ll i=18; i>=0; i--){
         strcpy(historyarr[i+1],historyarr[i]);
@@ -37,7 +45,7 @@ void updatehistory(){                           // updates history after every c
         }
         fclose(hf);
     }
-    return;
+    return 1;
 }
 
 void history(ll n, char *commarg[]){           // history function
@@ -48,6 +56,7 @@ void history(ll n, char *commarg[]){           // history function
     else{
         if(strlen(commarg[1])>2){
             printf("Put a number between 1 to 20!\n");
+            latest_status=0;
             return;
         }
         if(strlen(commarg[1])==1){
@@ -58,6 +67,7 @@ void history(ll n, char *commarg[]){           // history function
     if(total>20 || total<1)
     {
         printf("Put a number between 1 to 20!\n");
+        latest_status=0;
         return;
     }
     if(total > hisnum){

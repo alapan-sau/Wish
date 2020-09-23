@@ -39,7 +39,8 @@ void ls(ll n, char *commarg[]){                                                 
         commarg[n] = malloc(MA*sizeof(char));
         if(commarg[n]==NULL)
         {
-            printf("Oops! Memory error!\n");
+            fprintf(stderr,"Oops! Memory error!\n");
+            latest_status=0;
         }
         strcpy(commarg[n],currdir);
         n++;
@@ -62,6 +63,7 @@ void ls(ll n, char *commarg[]){                                                 
             char errormes[MA];
             sprintf(errormes,"ls %s",path);
             perror(errormes);
+            latest_status=0;
             continue;
         }
         struct stat mystat;
@@ -73,8 +75,10 @@ void ls(ll n, char *commarg[]){                                                 
             else{
                 char buf[512];
                 sprintf(buf, "%s/%s", path, newfile->d_name);
-                if(stat(buf, &mystat) < 0)
+                if(stat(buf, &mystat) < 0){
+                    latest_status=0;
                     return;
+                }
                 char permissions[20];
                 strcpy(permissions,"");
                 strcat(permissions,(S_ISDIR(mystat.st_mode)) ? "d" : "-");

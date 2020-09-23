@@ -15,20 +15,21 @@
 #include "util.h"
 
 void command_handler(char *curr_command){
+    latest_status=1;
     char *commarg[MA];
     ll totalcommarg = 0;
     tokenizer(commarg,curr_command," \t",&totalcommarg);
 
     if(strcmp(commarg[totalcommarg-1],"&")==0){
         backProcess(totalcommarg,commarg);
-        return;
     }
     else if(strcmp(commarg[0],"cd")==0){
         cd(totalcommarg,commarg);
     }
     else if(strcmp(commarg[0],"pwd")==0){
         if(totalcommarg>1){
-            printf("pwd : too many arguments\n");
+            fprintf(stderr,"pwd : too many arguments\n");
+            latest_status=0;
             return;
         }
         getcurdir();
@@ -60,21 +61,24 @@ void command_handler(char *curr_command){
     }
     else if(strcmp(commarg[0],"setenv")==0){    // test on linux!
         if(totalcommarg>3){
-            printf("too many arguments!\n");
+            fprintf(stderr,"too many arguments!\n");
+            latest_status=0;
             return;
         }
         else if(totalcommarg<3) commarg[2]="";
-
         if(setenv(commarg[1],commarg[2],1)<0){
             perror("setenv ");
+            latest_status=0;
         }
     }
     else if(strcmp(commarg[0],"unsetenv")==0){
         if(totalcommarg>2){
-            printf("too many arguments!\n");
+            fprintf(stderr,"too many arguments!\n");
+            latest_status=0;
             return;
         }
         if(unsetenv(commarg[1])<0){
+            latest_status=0;
             perror("unsetenv ");
         }
     }
@@ -95,8 +99,8 @@ void command_handler(char *curr_command){
     }
     else{
         foreProcess(totalcommarg,commarg);
-        return;
     }
+    return;
 }
 
 void redirecter(char *undirected){
@@ -105,10 +109,23 @@ void redirecter(char *undirected){
     char *infile;
     char *outfile;
 
+    ll bgp = 0;
+    ll len = strlen(undirected);
+    if(undirected[len-1]=='&'){                                     // check if bg prcs
+        undirected[len-1]='\0';
+        bgp = 1;
+    }
+
     core_command = strtok(undirected,">");
     outfile =strtok(NULL,"");                                       // contains >+file/file/NULL"
     core_command = strtok(core_command,"<");                        // contains file/NULL"
     infile = strtok(NULL,"");                                       // conatins file/NULL
+
+    char refined_command[MA];
+    strcpy(refined_command,core_command);
+    if(bgp==1){
+        strcat(refined_command,"&");
+    }
 
     if(infile!=NULL){
         ll len =strlen(infile);
@@ -135,7 +152,7 @@ void redirecter(char *undirected){
         outfile = strtok(outfile," \t");
     }
 
-    //printf("%s %s %s\n",core_command,infile,outfile);
+    // printf("%s %s %s\n",core_command,infile,outfile);
 
     int actual_cin = dup(0);
     int actual_cout = dup(1);
@@ -145,6 +162,7 @@ void redirecter(char *undirected){
         tilda_remover(infile);
         in = open(infile,O_RDONLY);
         if(in<0){
+            latest_status=0;
             tilda_adder(infile);
             perror(infile);
         }
@@ -155,14 +173,18 @@ void redirecter(char *undirected){
         else out=open(outfile,O_WRONLY|O_CREAT|O_TRUNC,0644);
 
         if(out<0){
+            latest_status=0;
             tilda_adder(outfile);
             perror(outfile);
         }
     }
     if(in < 0 || out < 0) return;
+
+    // printf("%s %s %s\n",refined_command,infile,outfile);
+
     dup2(in,STDIN_FILENO);
     dup2(out,STDOUT_FILENO);
-    command_handler(core_command);
+    command_handler(refined_command);
 
     if(in!=0)close(in);
     if(out!=1)close(out);
@@ -191,11 +213,13 @@ void piper(char *pipe_command){
         else{
             if(pipe(fd[i%2]) == -1){
 		        printf("Pipe creation makes an issue\n");
+                latest_status=0;
 		        return;
 	        }
             pid_t forkReturn = fork();
             if(forkReturn<0){
 		        printf("Couldn't perform fork()\n");
+                latest_status=0;
 		        return;
             }
             if(forkReturn==0){

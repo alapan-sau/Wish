@@ -1,3 +1,3 @@
 void loadhistory();
-void updatehistory();
+int updatehistory();
 void history(long long int n, char *commarg[]);
