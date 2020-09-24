@@ -42,10 +42,10 @@ void gethomedir(){                                             // stores home di
 void reference(){                                                 // prompt function
     char emotion[MA];
     if(latest_status==1){
-        strcpy(emotion,":')");
+        strcpy(emotion,"\e[0;92m:')");
     }
     else{
-        strcpy(emotion,":'(");
+        strcpy(emotion,"\e[0;91m:'(");
     }
     char username[MA];
     char hostname[MA];
@@ -53,13 +53,14 @@ void reference(){                                                 // prompt func
     getlogin_r(username,MA);                                          //fetches username
     gethostname(hostname,MA);                                         //fetches hostname
     getcurdir();
-    sprintf(reference,"%s \033[0;91m<%s@%s:\033[0;93m%s\033[0;91m> \033[0m",emotion,username,hostname,currdir);
-    printf("%s",reference);
+    sprintf(reference,"%s \033[0;96m<%s@%s:\033[0;34m%s\033[0;96m> \033[0m",emotion,username,hostname,currdir);
+    fprintf(stderr,"%s",reference);
+    fprintf(stdout,reset);
 }
 
 int main(){
+    starter();
     latest_status=1;
-    printf("\033[0;91m\n\n\t\t\t Welcome to C shell\n\n\033[0m");
     hisnum = 0;                                                    // total elements in historyarr
     jobtot=0;                                                      // total number of bg processes
     gethomedir();

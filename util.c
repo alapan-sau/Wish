@@ -33,3 +33,18 @@ void tokenizer(char *token[],char *str,char *delim, ll *total){
     }
     *total = index;
 }
+
+void starter(){
+    char username[MA];
+    char hostname[MA];
+    char reference[MA];
+    getlogin_r(username,MA);                                          //fetches username
+    gethostname(hostname,MA);                                         //fetches hostname
+    username[0] = (char)toupper(username[0]);
+    fprintf(stderr,clear);
+    fprintf(stderr,BHRED);
+    fprintf(stderr,"\nHello %s! Nice to meet you! \n",username);
+    fprintf(stderr,"\nI am ASH, your new shell\nI am designed by Alapan\nPlease report any shit I do to him :) Dont worry, its not a complaint, just a help in diagnosis for my treatment\n");
+    fprintf(stderr,"alapan.sau@students.iiit.ac.in\n\n");
+    fprintf(stderr,reset);
+}

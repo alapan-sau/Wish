@@ -12,6 +12,8 @@
 #include <time.h>
 #include <fcntl.h>
 #include <sys/wait.h>
+#include "colors.h"
+#include "ctype.h"
 
 #define ll long long int
 #define MA 100000
