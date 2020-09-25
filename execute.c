@@ -242,12 +242,55 @@ void piper(char *pipe_command){
     dup2(actual_cin,0);
 }
 
+void chainer(char *chained_command){
+    char *unchained[MA];
+    ll len = strlen(chained_command);
+    char opr[len];
+    ll id = 0;
+    for(ll i=0;i<len;i++){
+        if(chained_command[i]=='@' || chained_command[i]== '$')opr[id++]=chained_command[i];
+    }
+    ll total_opr = id;
+    ll total_unchained_commands = 0;
+
+    tokenizer(unchained,chained_command,"@$",&total_unchained_commands);
+
+    ll lastresult=0;
+    id = 0;
+
+    for(ll i=0;i<total_unchained_commands;i++){
+        // printf("i is %lld\n",i);
+        if(i==1){
+            lastresult = latest_status;
+        }
+        else if(i>1){
+            if(opr[id]=='@'){
+                lastresult = lastresult && latest_status;
+                id++;
+            }
+            else if(opr[id]=='$'){
+                lastresult = lastresult || latest_status;
+                id++;
+            }
+        }
+        // printf("id == %d\n",id);
+        if(i>0 && lastresult ==1 && opr[id]=='$'){
+            // printf("skips %s\n",unchained[i]);
+            continue;
+        }
+        else if(i>0 && lastresult ==0 && opr[id]=='@'){
+            // printf("skips %s\n",unchained[i]);
+            continue;
+        }
+        piper(unchained[i]);
+    }
+}
 void execute_command(){                                                 // command handler
     char *allcommands[MA];
     ll totalcommands=0;
     tokenizer(allcommands,command,";\n",&totalcommands);
 
     for(ll task=0;task<totalcommands;task++){
-        piper(allcommands[task]);
+        chainer(allcommands[task]);
     }
 }
