@@ -2,19 +2,19 @@
 
 void bg(ll n, char *commarg[]){
     if(n>2){
-        fprintf(stderr,"fg : too many arguments!\n");
+        fprintf(stderr,"bg : too many arguments!\n");
         latest_status=0;
         return;
     }
     else if(n<=1){
-        fprintf(stderr,"fg : too few arguments!\n");
+        fprintf(stderr,"bg : too few arguments!\n");
         latest_status=0;
         return;
     }
     else{
         ll index = atoi(commarg[1]);
         if(index > jobtot){
-            fprintf(stderr,"fg : Invalid process!\n");
+            fprintf(stderr,"bg : Invalid process!\n");
             latest_status=0;
             return;
         }
