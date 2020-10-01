@@ -19,12 +19,12 @@ void sigchld_handler(int signum)                                                
 
 void sigint_handler(int signum)                                                // signal Handler
 {
-    signal(signum,SIG_IGN);
+    signal(signum,SIG_IGN); // simply ignore as its shell
     latest_status=0;
 }
 
 void sigtstp_handler(int signum)                                                // signal Handler
 {
-    signal(signum,SIG_IGN);
+    signal(signum,SIG_IGN); // simply ignore as its shell
     latest_status=0;
 }

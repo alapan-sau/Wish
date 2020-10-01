@@ -19,7 +19,7 @@
     * Implemented in pwd.c
     * Prints the current working directory of the shell
 
-3. `cd` [Location] <br>
+3. `cd [Location]` <br>
     * Implemented in cd.c
     * Takes a path to a directory as an input and makes it the current working directory. With no arguments, it makes `~` as the current working directory.
 
