@@ -109,7 +109,7 @@ void redirecter(char *undirected){
     char *infile;
     char *outfile;
 
-    ll bgp = 0;
+    ll bgp = 0;                                                     // bg process flag
     ll len = strlen(undirected);
     if(undirected[len-1]=='&'){                                     // check if bg prcs
         undirected[len-1]='\0';
@@ -117,17 +117,17 @@ void redirecter(char *undirected){
     }
 
     core_command = strtok(undirected,">");
-    outfile =strtok(NULL,"");                                       // contains >+file/file/NULL"
-    core_command = strtok(core_command,"<");                        // contains file/NULL"
-    infile = strtok(NULL,"");                                       // conatins file/NULL
+    outfile =strtok(NULL,"");                                       // contains (>+output_file)/(output_file)/(NULL)
+    core_command = strtok(core_command,"<");                        // contains (core_command)
+    infile = strtok(NULL,"");                                       // conatins (input_file)/NULL
 
-    char refined_command[MA];
+    char refined_command[MA];                                       // don't do operations on strtok returns
     strcpy(refined_command,core_command);
     if(bgp==1){
         strcat(refined_command,"&");
     }
 
-    if(infile!=NULL){
+    if(infile!=NULL){                                               // infile processing
         ll len =strlen(infile);
 
         ll i;
@@ -139,9 +139,9 @@ void redirecter(char *undirected){
     }
 
     ll flag = 0;
-    if(outfile!=NULL){
+    if(outfile!=NULL){                                               // outfile processing
         if(outfile[0]=='>')flag = 1;  //append
-        else flag = 0;  //overwrite
+        else flag = 0;                //overwrite
 
         ll len =strlen(outfile);
         ll i;
@@ -152,13 +152,13 @@ void redirecter(char *undirected){
         outfile = strtok(outfile," \t");
     }
 
-    // printf("%s %s %s\n",core_command,infile,outfile);
 
-    int actual_cin = dup(0);
+
+    int actual_cin = dup(0);                                        //make copy of cin & cout
     int actual_cout = dup(1);
     ll in=0,out=1;
 
-    if(infile!=NULL){
+    if(infile!=NULL){                                               //get infile descriptor
         tilda_remover(infile);
         in = open(infile,O_RDONLY);
         if(in<0){
@@ -167,7 +167,7 @@ void redirecter(char *undirected){
             perror(infile);
         }
     }
-    if(outfile!=NULL){
+    if(outfile!=NULL){                                              //get outfile descriptor
         tilda_remover(outfile);
         if(flag==1) out=open(outfile,O_WRONLY|O_CREAT|O_APPEND,0644);
         else out=open(outfile,O_WRONLY|O_CREAT|O_TRUNC,0644);
@@ -178,18 +178,18 @@ void redirecter(char *undirected){
             perror(outfile);
         }
     }
-    if(in < 0 || out < 0) return;
+    if(in < 0 || out < 0) return;                                   // if files cant be accessed, return
 
-    // printf("%s %s %s\n",refined_command,infile,outfile);
 
-    dup2(in,STDIN_FILENO);
-    dup2(out,STDOUT_FILENO);
-    command_handler(refined_command);
 
-    if(in!=0)close(in);
+    dup2(in,STDIN_FILENO);                                          // attach 0 to infile desc
+    dup2(out,STDOUT_FILENO);                                        // attach 1 to outfile desc
+    command_handler(refined_command);                               // execute!!
+
+    if(in!=0)close(in);                                             // close both the desc
     if(out!=1)close(out);
 
-    dup2(actual_cin,STDIN_FILENO);
+    dup2(actual_cin,STDIN_FILENO);                                  // reassign 0 & 1 to cin & cout
     dup2(actual_cout,STDOUT_FILENO);
 
 }
@@ -204,9 +204,9 @@ void piper(char *pipe_command){
 
     int fd[2][2];
 
-    for(ll i=0;i<total_unpiped_commands;i++){
+    for(ll i=0;i<total_unpiped_commands;i++){       // pipe separated commands
 
-        if(i==(total_unpiped_commands-1)){
+        if(i==(total_unpiped_commands-1)){          // last pipe-sep command
             redirecter(unpiped_commands[i]);
             if(i!=0)close(fd[!(i%2)][0]);
         }
@@ -259,7 +259,6 @@ void chainer(char *chained_command){
     id = 0;
 
     for(ll i=0;i<total_unchained_commands;i++){
-        // printf("i is %lld\n",i);
         if(i==1){
             lastresult = latest_status;
         }
@@ -273,13 +272,10 @@ void chainer(char *chained_command){
                 id++;
             }
         }
-        // printf("id == %d\n",id);
         if(i>0 && lastresult ==1 && opr[id]=='$'){
-            // printf("skips %s\n",unchained[i]);
             continue;
         }
         else if(i>0 && lastresult ==0 && opr[id]=='@'){
-            // printf("skips %s\n",unchained[i]);
             continue;
         }
         piper(unchained[i]);
@@ -288,9 +284,9 @@ void chainer(char *chained_command){
 void execute_command(){                                                 // command handler
     char *allcommands[MA];
     ll totalcommands=0;
-    tokenizer(allcommands,command,";\n",&totalcommands);
+    tokenizer(allcommands,command,";\n",&totalcommands);                // removes semi-colons
 
-    for(ll task=0;task<totalcommands;task++){
+    for(ll task=0;task<totalcommands;task++){                           // semi-colon separated commands
         chainer(allcommands[task]);
     }
 }

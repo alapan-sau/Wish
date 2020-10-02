@@ -1,6 +1,6 @@
 #include "main.h"
 
-void tilda_adder(char *path){
+void tilda_adder(char *path){                                      // adds tilda to path
     ll lenHome = strlen(homedir);
     ll lenPath = strlen(path);
 
@@ -15,7 +15,7 @@ void tilda_adder(char *path){
     strcpy(path,address);
 }
 
-void tilda_remover(char *path){
+void tilda_remover(char *path){                                     // removes tilda from path to get absolute path
     if(path[0]=='~'){
         char *address;
         address = malloc(100*sizeof(char));
@@ -25,7 +25,7 @@ void tilda_remover(char *path){
     }
 }
 
-void tokenizer(char *token[],char *str,char *delim, ll *total){
+void tokenizer(char *token[],char *str,char *delim, ll *total){     // tokenises str into token by delim
     token[0] = strtok(str,delim);
     ll index = 0;
     while(token[index]!=NULL){

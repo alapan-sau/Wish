@@ -1,5 +1,5 @@
 # Wish
-## I am gonna keep all your wishes!
+# I am gonna keep all your wishes!
 ## How to Use?
 
 1. Run  `git clone https://github.com/alapan-sau/Wish.git` to download the shell.

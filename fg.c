@@ -24,13 +24,13 @@ void fg(ll n, char *commarg[]){
         pid_t child_pgid = getpgid(jobindex[index-1]);
         pid_t child_pid = jobindex[index-1];
         pid_t curr_pgid = getpgrp();
-        jobstat[index-1]=-1;
+        jobstat[index-1]=-1;        // remove from backprocess arr
 
-        signal(SIGTTOU,SIG_IGN);
+        signal(SIGTTOU,SIG_IGN);    //  Ignore the terminal control signals
         signal(SIGTTIN,SIG_IGN);
-        printf("[%lld] %s resumed\n", jobindex[index-1],jobarr[index-1]);
+        printf("[%lld] %s resumed\n", jobindex[index-1],jobarr[index-1]);   // throw resume msg
 
-        if(tcsetpgrp(STDIN_FILENO,child_pgid)<0){
+        if(tcsetpgrp(STDIN_FILENO,child_pgid)<0){   // pass the terminal to child
             jobstat[index-1]=1;
             perror("tcsetpgrp ");
             latest_status=0;
@@ -49,16 +49,16 @@ void fg(ll n, char *commarg[]){
         }
 
         int status;
-        waitpid(child_pid,&status,WUNTRACED);
-        tcsetpgrp(0,curr_pgid);
-        signal(SIGTTOU,SIG_DFL);
+        waitpid(child_pid,&status,WUNTRACED);   // wait for the process
+        tcsetpgrp(0,curr_pgid);                 // take the terminal back
+        signal(SIGTTOU,SIG_DFL);                // set the terminal signals to default
         signal(SIGTTIN,SIG_DFL);
 
-        if(WIFSTOPPED(status)){
+        if(WIFSTOPPED(status)){                 // ctrl-Z(process suspended)
             fprintf(stderr," Process %s with process ID [%lld] suspended\n",jobarr[index-1],jobindex[index-1]);
+            latest_status=0;
             jobstat[index-1]=1;
         }
-
         return;
     }
 }

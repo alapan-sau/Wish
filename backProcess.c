@@ -18,9 +18,9 @@ void backProcess(ll n, char *commarg[]){
         if(ret<0){
             fprintf(stderr,"Oops! Invalid command!\n");
             latest_status=0;
-            exit(1);
+            exit(EXIT_FAILURE);
         }
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
     else{
         ll len = strlen(commarg[0]);                                   // parent process
