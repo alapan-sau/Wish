@@ -19,7 +19,7 @@ void command_handler(char *curr_command){
     char *commarg[MA];
     ll totalcommarg = 0;
     tokenizer(commarg,curr_command," \t",&totalcommarg);
-
+    if(commarg[0]==NULL) return;
     if(strcmp(commarg[totalcommarg-1],"&")==0){
         backProcess(totalcommarg,commarg);
     }
