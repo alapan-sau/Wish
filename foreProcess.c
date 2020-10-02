@@ -6,7 +6,7 @@ void foreProcess(ll n,char *commarg[]){
     signal(SIGTTOU,SIG_IGN);
 
     ll forkReturn = fork();
-    setpgrp();  // any signal passed will be taken by the child process alone (as process groups are different)
+     // any signal passed will be taken by the child process alone (as process groups are different)
 
     if(forkReturn<0){
         fprintf(stderr,"Oops! Unable to fork!\n");
@@ -14,6 +14,7 @@ void foreProcess(ll n,char *commarg[]){
         return;
     }
     if(forkReturn==0){                                // foreground/child process
+        setpgrp(); 
         commarg[n]=NULL;
         tcsetpgrp(STDIN_FILENO,getpgid(0));
         signal(SIGINT,SIG_DFL);

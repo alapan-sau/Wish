@@ -186,8 +186,8 @@ void redirecter(char *undirected){
     dup2(out,STDOUT_FILENO);                                        // attach 1 to outfile desc
     command_handler(refined_command);                               // execute!!
 
-    if(in!=0)close(in);                                             // close both the desc
-    if(out!=1)close(out);
+    if(in!=0 && in!=1)close(in);                                             // close both the desc
+    if(out!=1 && out!=0)close(out);
 
     dup2(actual_cin,STDIN_FILENO);                                  // reassign 0 & 1 to cin & cout
     dup2(actual_cout,STDOUT_FILENO);
@@ -208,7 +208,7 @@ void piper(char *pipe_command){
 
         if(i==(total_unpiped_commands-1)){          // last pipe-sep command
             redirecter(unpiped_commands[i]);
-            if(i!=0)close(fd[!(i%2)][0]);
+            if(i!=0 && fd[!(i%2)][0])close(fd[!(i%2)][0]);
         }
         else{
             if(pipe(fd[i%2]) == -1){
@@ -223,18 +223,18 @@ void piper(char *pipe_command){
 		        return;
             }
             if(forkReturn==0){
-                close(fd[i%2][0]);
+                if(fd[(i%2)][0])close(fd[i%2][0]);
                 dup2(fd[i%2][1], 1);
 		        redirecter(unpiped_commands[i]);
 
-		        close(fd[i%2][1]);
+		        if(fd[(i%2)][1])close(fd[i%2][1]);
 		        exit(0);
             }
             else{
-                close(fd[i%2][1]);
+                if(fd[(i%2)][1])close(fd[i%2][1]);
                 waitpid(forkReturn, NULL, 0);
                 dup2(fd[i%2][0], 0);
-                if(i!=0)close(fd[!(i%2)][0]);
+                if(i!=0 && fd[!(i%2)][0])close(fd[!(i%2)][0]);
             }
         }
     }

@@ -59,6 +59,7 @@ void reference(){                                                 // prompt func
 }
 
 int main(){
+    setpgrp();
     starter();
     latest_status=1;                                               // latest exit_code initialised to 1(success)
     hisnum = 0;                                                    // total elements in historyarr initialised to 0

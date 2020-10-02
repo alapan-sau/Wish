@@ -2,7 +2,6 @@
 
 void backProcess(ll n, char *commarg[]){
     ll forkReturn = fork();
-    setpgrp();                                              // setting process ID to process grp ID;
     // setpgid(0,0);                                        // same thing can be done using
     if(forkReturn<0){
         fprintf(stderr,"Oops! Unable to fork!\n");
@@ -10,6 +9,7 @@ void backProcess(ll n, char *commarg[]){
         return;
     }
     if(forkReturn==0){                                                // background/child process
+        setpgrp();                                              // setting process ID to process grp ID;
         commarg[n-1]=NULL;
         signal(SIGINT,SIG_DFL);
         signal(SIGTSTP,SIG_DFL);
