@@ -42,9 +42,8 @@ void starter(){
     gethostname(hostname,MA);                                         //fetches hostname
     username[0] = (char)toupper(username[0]);
     fprintf(stderr,clear);
-    fprintf(stderr,BHRED);
+    fprintf(stderr,HRED);
     fprintf(stderr,"\nHello %s! Nice to meet you! \n",username);
-    fprintf(stderr,"\nI am Wish, your new shell. And I, am gonna keep all your wishes\nI am designed by Alapan\nPlease report any shit I do to him :) Dont worry, its not a complaint, just a help in diagnosis for my treatment\n");
-    fprintf(stderr,"alapan.sau@students.iiit.ac.in\n\n");
+    fprintf(stderr,"I am Wish, your new shell.\n\n");
     fprintf(stderr,reset);
 }

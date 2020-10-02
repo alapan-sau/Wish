@@ -1,17 +1,18 @@
 # Wish
-# I am gonna keep all your wishes!
+
 ## How to Use?
 
 1. Run  `git clone https://github.com/alapan-sau/Wish.git` to download the shell.
-1. Run `make` in the Shell directory to compile the C-Shell.
-2. Run `./main` to execute the shell.
+2. Run `make` in the Shell directory to compile the C-Shell.
+3. Run `./main` to execute the shell.
 
    ```shell
     $ git clone https://github.com/alapan-sau/Wish.git
-    $ cd Ash
+    $ cd Wish
     $ make
     $ ./main
    ```
+
 <br>
 
 ## Features
@@ -74,6 +75,7 @@
     * Press <kbd>q</kbd> ` + ` <kbd>Enter</kbd> to stop the execution.
 
 8. `quit`
+    * Implemented in quit.c
     * Quits the C Shell.
     * This will kill all background and foreground processes running on the Shell before quiting.
 
@@ -100,15 +102,15 @@
 
 13. `overkill`
     * Implemented in overkill.c
-    * Terminates all foreground as well as background processes.
+    * Terminates all background processes.
 
 14. `fg [jid]`
     * Implemented in fg.c
-    * Continues a stopped background process identified by Job ID,  `jid` as a foreground process.
+    * Continues a suspended background process identified by Job ID `jid` as a foreground process.
 
 15. `bg [jid]`
     * Implemented in bg.c
-    * Continues a stopped background process identified by Job ID,  `jid` as a background process.
+    * Continues a suspended background process identified by Job ID `jid` as a background process.
 
 ## Syntactical Details
 
@@ -127,6 +129,7 @@
    ```
 
 3. <kbd><</kbd> is used for input redirection. <kbd>></kbd> and <kbd>>></kbd> are used for output redirection as overwrite and append respectively. For e.g,
+
    ```shell
     $ ls > file.txt
     $ sort < file.txt > sortedfile.txt
@@ -134,11 +137,13 @@
    ```
 
 4. Commands are chained based on `EXIT CODES` by using `@` as the `AND` and `$` as the `OR` symbol.For e.g,
+
    ```shell
     $ mkdir newdir @ cd newdir $ rm -rf newdir
    ```
 
 4. Multiple `;` separated instructions, each having multiple commands piped to each other with redirections to and from files can be executed along with chaining. For e.g,
+
    ```shell
     $ ls > file1.txt @ ls $ cd .. ; sort < file1.txt | cat | wc ; ls | wc;
    ```
@@ -152,6 +157,17 @@
 8. Any non-built-in command executable will be searched for in the `PATH`
 
 9. Based on the `EXIT CODE` of the last instruction, the prompt will appear with the `SHELL_EMOTI` as `:')` representing `success` or `:'(` representing `failure`.
+
+## Filewise break-up
+
+* `main.c` It contains the `main()` . The shell execution starts here.
+* `history.c` Every command is appended to the `historyfile.txt` for future reference.
+* `execute.c` Commands are parsed. Functions for redirection, piping, chaining and execution are implemented
+* `signal_handlers.c` Signal handlers for `SIGCHLD`, `SIGINT`, `SIGTSTP` are implemented.
+* `util.c` This file contains all Utility functions such as, `tokenizer()`, `tilda_remover()` etc.
+* `backProcess.c` Execution of background processes is implemented.
+* `foreProcess.c` Execution of external foreground processes is implemented.
+* `others` Files like `cd.c`, `ls.c` etc are used to implement corresponding built-in commands.
 
 ## Implementation Details
 
@@ -185,7 +201,7 @@
 
 * The `&` argument at the end of a command indicates a background process. The same approach as above is used, however, the shell doesn't wait for the process execution. The shell keeps a track of all such background processes along with their status and process ID.
 
-## Future Prospects
+## To be done
 
 1. Command history and <kbd>up</kbd> /  <kbd>Down</kbd> arrow command-recall across sessions
 2. <kbd>tab</kbd> completion
