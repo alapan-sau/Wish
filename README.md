@@ -1,13 +1,13 @@
-# C Shell
-## A *bash-like* shell for Linux implemented in C.
+# Wish
+## I am gonna keep all your wishes!
 ## How to Use?
 
-1. Run  `git clone https://github.com/alapan-sau/Ash.git` to download the shell.
+1. Run  `git clone https://github.com/alapan-sau/Wish.git` to download the shell.
 1. Run `make` in the Shell directory to compile the C-Shell.
 2. Run `./main` to execute the shell.
 
    ```shell
-    $ git clone https://github.com/alapan-sau/Ash.git
+    $ git clone https://github.com/alapan-sau/Wish.git
     $ cd Ash
     $ make
     $ ./main
@@ -191,4 +191,4 @@
 2. <kbd>tab</kbd> completion
 3. Aliasing
 <br>
- *and many more ...*
+ <i>and many more ...</i>
