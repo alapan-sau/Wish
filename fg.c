@@ -2,7 +2,8 @@
 #include "util.h"
 
 void fg(ll n, char *commarg[]){
-    sleep(1);
+    useconds_t usec = 1000;
+    usleep(usec);
     if(n>2){
         printf("fg : too many arguments!\n");
         latest_status=0;
@@ -27,6 +28,7 @@ void fg(ll n, char *commarg[]){
 
         signal(SIGTTOU,SIG_IGN);
         signal(SIGTTIN,SIG_IGN);
+        printf("[%lld] %s resumed\n", jobindex[index-1],jobarr[index-1]);
 
         if(tcsetpgrp(STDIN_FILENO,child_pgid)<0){
             jobstat[index-1]=1;
@@ -47,7 +49,6 @@ void fg(ll n, char *commarg[]){
         }
 
         int status;
-
         waitpid(child_pid,&status,WUNTRACED);
         tcsetpgrp(0,curr_pgid);
         signal(SIGTTOU,SIG_DFL);

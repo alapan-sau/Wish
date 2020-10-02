@@ -16,6 +16,8 @@ void foreProcess(ll n,char *commarg[]){
     if(forkReturn==0){                                // foreground/child process
         commarg[n]=NULL;
         tcsetpgrp(STDIN_FILENO,getpgid(0));
+        signal(SIGINT,SIG_DFL);
+        signal(SIGTSTP,SIG_DFL);
         ll ret = execvp(commarg[0],commarg);
         if(ret<0){
             fprintf(stderr,"Oops! Invalid command!\n");

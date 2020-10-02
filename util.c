@@ -44,7 +44,7 @@ void starter(){
     fprintf(stderr,clear);
     fprintf(stderr,BHRED);
     fprintf(stderr,"\nHello %s! Nice to meet you! \n",username);
-    fprintf(stderr,"\nI am ASH, your new shell\nI am designed by Alapan\nPlease report any shit I do to him :) Dont worry, its not a complaint, just a help in diagnosis for my treatment\n");
+    fprintf(stderr,"\nI am C-Shell, your new shell\nI am designed by Alapan\nPlease report any shit I do to him :) Dont worry, its not a complaint, just a help in diagnosis for my treatment\n");
     fprintf(stderr,"alapan.sau@students.iiit.ac.in\n\n");
     fprintf(stderr,reset);
 }

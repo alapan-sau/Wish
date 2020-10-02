@@ -11,6 +11,8 @@ void backProcess(ll n, char *commarg[]){
     }
     if(forkReturn==0){                                                // background/child process
         commarg[n-1]=NULL;
+        signal(SIGINT,SIG_DFL);
+        signal(SIGTSTP,SIG_DFL);
         pid_t pid = getpid();
         ll ret = execvp(commarg[0],commarg);                          // executes executable files
         if(ret<0){

@@ -59,7 +59,7 @@ void command_handler(char *curr_command){
     else if(strcmp(commarg[0],"nightswatch")==0){
         nightswatch(totalcommarg,commarg);
     }
-    else if(strcmp(commarg[0],"setenv")==0){    // test on linux!
+    else if(strcmp(commarg[0],"setenv")==0){
         if(totalcommarg>3){
             fprintf(stderr,"too many arguments!\n");
             latest_status=0;
