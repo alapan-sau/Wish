@@ -2,7 +2,7 @@
 
 ## How to Use?
 
-1. Run  `git clone https://github.com/alapan-sau/Wish.git` to download the shell.
+1. Run `git clone https://github.com/alapan-sau/Wish.git` to download the shell.
 2. Run `make` in the Shell directory to compile the C-Shell.
 3. Run `./main` to execute the shell.
 
