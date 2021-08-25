@@ -36,7 +36,7 @@ void foreProcess(ll n,char *commarg[]){
         signal(SIGTTOU,SIG_DFL);
 
 
-        if(WIFSTOPPED(status)){   // if child is stopped(not killed) by ctrl-z, we can check that by this macro! I have sent you a photo in whatsapp about other such macros!
+        if(WIFSTOPPED(status)){   // if child is stopped(not killed) by ctrl-z, we can check that by this macro!
             ll len = strlen(latest_fore_process_name);
             jobindex[jobtot]=forkReturn;                // push created child to jobs as its suspended in background!
             jobarr[jobtot] = malloc(len * sizeof(char));
